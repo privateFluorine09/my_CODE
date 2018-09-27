@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1521003882 source:d:\b\random\random\random1.cpp
+	<iostream>
+	<random>
+	<ctime>
+
+1521003955 source:d:\b\random\random\random2.cpp
+	<iostream>
+
+1521016515 source:e:\b\random\random\random1.cpp
+	<iostream>
+	<random>
+	<ctime>
+	<cstdlib>
+
+1521016498 source:e:\b\random\random\random2.cpp
+	<iostream>
+	<random>
+	<ctime>
+

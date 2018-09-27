@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1521355058 source:e:\b\killer_choose\name_map.cpp
+	"killer.h"
+	<map>
+	<utility>
+	<string>
+
+1521354761 e:\b\killer_choose\killer.h
+	<map>
+	<utility>
+	<string>
+
+1521355643 source:e:\b\killer_choose\random.cpp
+	<iostream>
+	<string>
+	<ctime>
+	<random>
+	<cstdlib>
+
