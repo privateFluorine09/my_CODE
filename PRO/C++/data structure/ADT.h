@@ -1627,7 +1627,7 @@ template<typename T>
 std::ostream &operator<< (std::ostream&, const ADT_max_heap<T>&);
 
 template<typename T>
-class ADT_max_heap: public ADT_max_priority_queue
+class ADT_max_heap: public ADT_max_priority_queue<T>
 {
 
     friend std::ostream &operator<< <T> (std::ostream &os, const ADT_max_heap<T> &obj);
@@ -1635,15 +1635,112 @@ class ADT_max_heap: public ADT_max_priority_queue
 public:
     ADT_max_heap()=default;
     ADT_max_heap(const initializer_list<T> &lst);
-    ~ADT_max_heap() { delete heap_ptr;}
+    ~ADT_max_heap() { delete [] heap_ptr;}
 
     bool empty() {return (heap_size==0);}
     int size() {return heap_size;}
-
+    const T &top() const {return heap_ptr[0];}
+    void pop();
+    void push(const T &elm);
 
 private:
     int heap_size=0;
     T *heap_ptr=nullptr;
+    int heap_capacity=0;
+
+    void max_heapify(int i);
 };
+
+//constructor:
+
+template<typename T>
+ADT_max_heap<T>::ADT_max_heap(const initializer_list<T> &lst): heap_size(lst.size()), heap_capacity(2*lst.size())
+{
+    heap_ptr=new T[2*lst.size()];
+
+    typename initializer_list<T>::iterator itr=lst.begin();
+    int i=0;
+
+    while(itr!=lst.end())
+    {
+        heap_ptr[i]=*itr;
+        itr++, i++;
+    }
+
+    for(int j=heap_size/2-1; j>=0; j--)
+    max_heapify(j);
+}
+
+//operator:
+
+template<typename T>
+std::ostream &operator<< (std::ostream &os, const ADT_max_heap<T> &obj)
+{
+    int i=0;
+
+    while(i!=obj.heap_size)
+    {
+        os << obj.heap_ptr[i];
+        i++;
+    }
+
+    return os;
+}
+
+//method:
+template<typename T>
+void ADT_max_heap<T>::max_heapify(int i)
+{
+
+    if(i<0 || i>=heap_size)
+        throw "illegal index";
+
+    int _left=2*i+1;
+    int _right=2*i+2;
+    int _largest;
+
+    if(_left<heap_size && heap_ptr[_left]>heap_ptr[i])
+        _largest=_left;
+    else _largest=i;
+
+    if(_right<heap_size && heap_ptr[_right]>heap_ptr[_largest])
+        _largest=_right;
+
+    if(_largest!=i)
+    {
+        T store=heap_ptr[i];
+        heap_ptr[i]=heap_ptr[_largest];
+        heap_ptr[_largest]=store;
+        max_heapify(_largest);
+    }
+}
+
+template<typename T>
+void ADT_max_heap<T>::push(const T &elm)
+{
+    if(heap_size+1==heap_capacity)
+    {
+        T *ptr1=heap_ptr;
+
+        heap_ptr=new T[2*heap_capacity];
+
+        //heap_size++;
+        heap_capacity*=2;
+
+    for(int i=0; i!=heap_size; i++)
+        heap_ptr[i]=ptr1[i];
+    }
+
+    int current=++heap_size;
+
+    while(current!=0 && heap_ptr[(current-1)/2] < elm)
+    {
+        heap_ptr[current]=heap_ptr[(current-1)/2];
+        current=(current-1)/2;
+
+    }
+
+    heap_ptr[current]=elm;
+}
 
 #endif // ADT_H_INCLUDED
