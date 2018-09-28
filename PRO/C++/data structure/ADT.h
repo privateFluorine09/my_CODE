@@ -3,6 +3,7 @@
 
 
 #include<string>
+#include<initializer_list>
 #include<deque>
 #include<vector>
 #include<utility>
@@ -1617,6 +1618,32 @@ public:
     virtual void pop();
     virtual void push(const T &elm)=0;
 
+};
+
+template<typename T>
+class ADT_max_heap;
+
+template<typename T>
+std::ostream &operator<< (std::ostream&, const ADT_max_heap<T>&);
+
+template<typename T>
+class ADT_max_heap: public ADT_max_priority_queue
+{
+
+    friend std::ostream &operator<< <T> (std::ostream &os, const ADT_max_heap<T> &obj);
+
+public:
+    ADT_max_heap()=default;
+    ADT_max_heap(const initializer_list<T> &lst);
+    ~ADT_max_heap() { delete heap_ptr;}
+
+    bool empty() {return (heap_size==0);}
+    int size() {return heap_size;}
+
+
+private:
+    int heap_size=0;
+    T *heap_ptr=nullptr;
 };
 
 #endif // ADT_H_INCLUDED
