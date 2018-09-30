@@ -1614,8 +1614,8 @@ public:
     virtual ~ADT_max_priority_queue() {}
     virtual bool empty() const =0;
     virtual int size() const=0;
-    virtual const T &top()=0;
-    virtual void pop();
+    virtual const T &top()const=0;
+    virtual void pop()=0;
     virtual void push(const T &elm)=0;
 
 };
@@ -1637,8 +1637,8 @@ public:
     ADT_max_heap(const initializer_list<T> &lst);
     ~ADT_max_heap() { delete [] heap_ptr;}
 
-    bool empty() {return (heap_size==0);}
-    int size() {return heap_size;}
+    bool empty() const{return (heap_size==0);}
+    int size() const{return heap_size;}
     const T &top() const {return heap_ptr[0];}
     void pop();
     void push(const T &elm);
@@ -1680,7 +1680,7 @@ std::ostream &operator<< (std::ostream &os, const ADT_max_heap<T> &obj)
 
     while(i!=obj.heap_size)
     {
-        os << obj.heap_ptr[i];
+        os << obj.heap_ptr[i] <<" ";
         i++;
     }
 
@@ -1743,4 +1743,30 @@ void ADT_max_heap<T>::push(const T &elm)
     heap_ptr[current]=elm;
 }
 
+template<typename T>
+void ADT_max_heap<T>::pop()
+{
+    if(heap_size==0)
+        throw "Empty queue.";
+
+    T lastElm=heap_ptr[--heap_size];
+
+    int current=0, child=1;
+
+    while(child < heap_size)
+    {
+        if(child<heap_size-1 && heap_ptr[child]< heap_ptr[child+1])
+            child++;
+
+        if(lastElm>=heap_ptr[child])
+            break;
+
+        heap_ptr[current]=heap_ptr[child];
+        current=child;
+        child=2*child+1;
+
+    }
+
+    heap_ptr[current]=lastElm;
+}
 #endif // ADT_H_INCLUDED
