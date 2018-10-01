@@ -1769,4 +1769,7 @@ void ADT_max_heap<T>::pop()
 
     heap_ptr[current]=lastElm;
 }
+
+template<typename T>
+class ADT_HBLT;
 #endif // ADT_H_INCLUDED

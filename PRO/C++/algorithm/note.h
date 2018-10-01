@@ -1,3 +1,6 @@
+
+//not a actual header, just my notebook
+
 static const auto _ = []()
 {
     ios::sync_with_stdio(false);
@@ -83,5 +86,22 @@ public:
             preorder(root->right, sum-value);
 
         }
+    }
+};
+
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int buy = INT_MAX;
+	int profit = 0;
+	for (int i = 0; i < prices.size(); ++i) {
+		if (prices[i] < buy) {
+			buy = prices[i]; continue;
+		}
+		if (buy<INT_MAX&&prices[i] - buy>profit)
+			profit = prices[i] - buy;
+	}
+	return profit;
     }
 };
