@@ -1772,4 +1772,15 @@ void ADT_max_heap<T>::pop()
 
 template<typename T>
 class ADT_HBLT;
+
+template<typename T>
+class ADT_HBLT: public ADT_binary_tree<pair<T, int>>
+{
+public:
+
+
+
+private:
+
+};
 #endif // ADT_H_INCLUDED
