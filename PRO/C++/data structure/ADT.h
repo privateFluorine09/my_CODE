@@ -1289,7 +1289,7 @@ public:
    // void print(std::ostream&);
 
 
-private:
+protected:
     ADT_binary_tree_node<T>* root;
     T elm;
     int tree_size;
@@ -1776,11 +1776,55 @@ class ADT_HBLT;
 template<typename T>
 class ADT_HBLT: public ADT_binary_tree<pair<T, int>>
 {
+
+template<typename T1> using node=ADT_binary_tree_node<pair<T1, int>>;
+
 public:
 
 
-
 private:
-
+   void meld(node<T>*,node<T>*);
 };
+
+template<typename T>
+void ADT_HBLT<T>::meld(node<T> *tree1, node<T> *tree2)
+{
+   if(tree1==nullptr)
+      return;
+
+   if(tree2==nullptr)
+   {
+      tree1=tree2;
+      return;
+   }
+
+   if(tree1->elm.first < tree2->elm.first)
+   {
+      auto store=tree1;
+      tree1=tree2;
+      tree2=store;
+   }
+
+   meld(tree1->right, tree2);
+
+   if(tree1->left==nullptr)
+   {
+      tree1->left=tree1->right;
+      tree1->right=nullptr;
+      tree1->elm.second=1;
+   }
+
+   else
+   {
+      if(tree1->left->elm.second < tree1->right->elm.second)
+      {
+         auto store=tree1->left;
+         tree1=tree2;
+         tree2=store;
+      }
+
+      tree1->elm.second=tree1->right->elm.second+1;
+   }
+
+}
 #endif // ADT_H_INCLUDED
