@@ -1776,7 +1776,6 @@ class ADT_HBLT;
 template<typename T>
 class ADT_HBLT: public ADT_binary_tree<pair<T, int>>
 {
-
 template<typename T1> using node=ADT_binary_tree_node<pair<T1, int>>;
 
 public:
@@ -1804,14 +1803,14 @@ void ADT_HBLT<T>::meld(node<T> *tree1, node<T> *tree2)
       tree1=tree2;
       tree2=store;
    }
-
+                               //let tree1->elm.first to be the maxima
    meld(tree1->right, tree2);
 
    if(tree1->left==nullptr)
    {
       tree1->left=tree1->right;
       tree1->right=nullptr;
-      tree1->elm.second=1;
+      tree1->elm.second=1;                  //if tree->left is null
    }
 
    else
@@ -1820,7 +1819,7 @@ void ADT_HBLT<T>::meld(node<T> *tree1, node<T> *tree2)
       {
          auto store=tree1->left;
          tree1=tree2;
-         tree2=store;
+         tree2=store;                                 //if tree->left->second is lower
       }
 
       tree1->elm.second=tree1->right->elm.second+1;
