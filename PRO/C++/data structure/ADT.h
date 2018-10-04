@@ -916,6 +916,7 @@ void ADT_vector_stack<T>::combine(ADT_vector_stack<T> &obj)
 
 }
 
+//stack
 
 template<typename T>
 class ADT_array_stack;
@@ -1047,9 +1048,9 @@ class ADT_chain_stack: ADT_stack
 {
      typedef ADT_chain_node<T> node;
      typedef ADT_chain_stack<T> stack;
-};*/
+};*/  //not enough time to complete
 
-
+//queue:
 
 template<typename T>
 class ADT_queue
@@ -1233,6 +1234,8 @@ class ADT_binary_tree;
 //template<typename T>
 //std::ostream &operator<< (std::ostream&, const ADT_binary_tree<T>&);
 
+//binary tree:
+
 template<typename T>
 class ADT_binary_tree
 {
@@ -1277,7 +1280,9 @@ public:
 
     void level_order(void(*visiter)(ADT_binary_tree_node<T>*)){levelOrder(root, visiter);}
 
-    int height();
+    int height() const;
+
+    int size() const { return tree_size;};
 
 
     void deroot(ADT_binary_tree_node<T>*);
@@ -1336,6 +1341,8 @@ template<typename T>
 ADT_binary_tree<T>::ADT_binary_tree(ADT_binary_tree<T> &obj)
 {
     copy_tree(root, obj.root);
+
+    tree_size=obj.tree_size;
 }
 
 //operators:
@@ -1343,6 +1350,8 @@ ADT_binary_tree<T>::ADT_binary_tree(ADT_binary_tree<T> &obj)
 template<typename T>
 bool ADT_binary_tree<T>::operator==(ADT_binary_tree<T> &another)
 {
+    if(tree_size!=another.tree_size)
+      return false;
     return tree_cmp(root, another.root);
 }
 //method:
@@ -1502,6 +1511,8 @@ void ADT_binary_tree<T>::create_tree(ADT_binary_tree_node<T> *&ptr, vector<T> &v
 
     ptr=new ADT_binary_tree_node<T>(vec.at(location));
 
+    tree_size++;
+
     create_tree(ptr->left, vec, 2*location+1);
     create_tree(ptr->right, vec, 2*location+2);
 }
@@ -1549,7 +1560,7 @@ void ADT_binary_tree<T>::swap()
 }
 
 template<typename T>
-int ADT_binary_tree<T>::height()
+int ADT_binary_tree<T>::height() const
 {
     return tree_height(root);
 }
@@ -1604,7 +1615,7 @@ void ADT_binary_tree<T>::deroot(ADT_binary_tree_node<T> *root)
         delete tmp;
 }
 
-
+//max_priority_queue
 
 template<typename T>
 class ADT_max_priority_queue
@@ -1779,11 +1790,25 @@ class ADT_HBLT: public ADT_binary_tree<pair<T, int>>
 template<typename T1> using node=ADT_binary_tree_node<pair<T1, int>>;
 
 public:
+   void meld(ADT_HBLT &);
 
 
 private:
    void meld(node<T>*,node<T>*);
 };
+
+//method:
+
+template<typename T>
+void ADT_HBLT<T>::meld(ADT_HBLT &another)
+{
+   meld(root, another.root);
+
+   tree_size+=another.tree_size;
+
+   another.root=nullptr;
+   another.tree_size=0;
+}
 
 template<typename T>
 void ADT_HBLT<T>::meld(node<T> *tree1, node<T> *tree2)
@@ -1824,6 +1849,5 @@ void ADT_HBLT<T>::meld(node<T> *tree1, node<T> *tree2)
 
       tree1->elm.second=tree1->right->elm.second+1;
    }
-
 }
 #endif // ADT_H_INCLUDED
