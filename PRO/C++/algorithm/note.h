@@ -105,3 +105,50 @@ public:
 	return profit;
     }
 };
+
+//possible solution:
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+
+        if(prices.empty())
+            return 0;
+
+        vector<int>::iterator itr=prices.begin();
+
+        vector<int>::iterator buy, sell;
+
+        buy=itr, sell=prices.end();
+
+        itr++;
+
+        while(itr!=prices.end()){
+
+            if(*itr<*buy){
+                buy=itr;
+                itr++;
+                continue;
+            }
+
+            if(sell==prices.end()){
+                if(*itr>*buy && itr-buy>0){
+                    sell=itr;
+                    itr++;
+                    continue;
+                }
+            }
+
+            if(*itr>*sell && itr-buy>0){
+                sell=itr;
+            }
+
+            itr++;
+        }
+
+        if(sell=prices.end())
+            return 0;
+
+        return *sell-*buy;
+    }
+};

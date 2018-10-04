@@ -1282,7 +1282,7 @@ public:
 
     int height() const;
 
-    int size() const { return tree_size;};
+    //int size() const { return tree_size;};
 
 
     void deroot(ADT_binary_tree_node<T>*);
@@ -1296,7 +1296,6 @@ public:
 
 protected:
     ADT_binary_tree_node<T>* root;
-    T elm;
     int tree_size;
 
     //static void (*visit)(ADT_binary_tree_node<T>*);
@@ -1781,6 +1780,10 @@ void ADT_max_heap<T>::pop()
     heap_ptr[current]=lastElm;
 }
 
+
+//HBLT:
+
+
 template<typename T>
 class ADT_HBLT;
 
@@ -1791,27 +1794,50 @@ template<typename T1> using node=ADT_binary_tree_node<pair<T1, int>>;
 
 public:
    void meld(ADT_HBLT &);
-
+   void push(const T &);
+   void pop();
 
 private:
-   void meld(node<T>*,node<T>*);
+   void meld(node<T>*&,node<T>*&);
 };
 
 //method:
 
 template<typename T>
+void ADT_HBLT<T>::push(const T &obj)
+{
+   node<T> *new_node=new ADT_binary_tree_node<pair<T, int>>(make_pair(obj, 1));
+
+   ADT_binary_tree<T> new_tree;
+   new_tree.root=&new_node;
+   new_tree.tree_size=1;
+
+   meld(new_tree);
+}
+
+template<typename T>
+void ADT_HBLT<T>::pop()
+{
+   this->tree_size--;
+   meld(this->root->left, this->root->right);
+
+   delete this->root;
+   this->root=this->root->left;
+}
+
+template<typename T>
 void ADT_HBLT<T>::meld(ADT_HBLT &another)
 {
-   meld(root, another.root);
+   meld(this->root, another.root);
 
-   tree_size+=another.tree_size;
+   this->tree_size+=another.tree_size;
 
    another.root=nullptr;
    another.tree_size=0;
 }
 
 template<typename T>
-void ADT_HBLT<T>::meld(node<T> *tree1, node<T> *tree2)
+void ADT_HBLT<T>::meld(node<T> *&tree1, node<T> *&tree2)
 {
    if(tree1==nullptr)
       return;
