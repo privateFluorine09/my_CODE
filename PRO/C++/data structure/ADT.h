@@ -31,21 +31,30 @@ bool operator<(const ADT_array_list<T> &arr1, const ADT_array_list<T> &arr2);
 template<typename T>
 class ADT_array_list
 {
-friend std::ostream &operator<< <T>(std::ostream &os, const ADT_array_list &obj);
-friend bool operator== <T>(const ADT_array_list &arr1, const ADT_array_list &arr2);
-friend bool operator!= <T>(const ADT_array_list &arr1, const ADT_array_list &arr2);
-friend bool operator< <T>(const ADT_array_list &arr1, const ADT_array_list &arr2);
+    friend std::ostream &operator<< <T>(std::ostream &os, const ADT_array_list &obj);
+    friend bool operator== <T>(const ADT_array_list &arr1, const ADT_array_list &arr2);
+    friend bool operator!= <T>(const ADT_array_list &arr1, const ADT_array_list &arr2);
+    friend bool operator< <T>(const ADT_array_list &arr1, const ADT_array_list &arr2);
 
 //friend std::ostream &operator<T>(std::ostream &os, const ADT_array_list &obj)
 
 public:
     ADT_array_list()=default;
     ADT_array_list(const ADT_array_list& );
-    ADT_array_list(int cap): list_capacity(cap) {elm_ptr=new T [cap];};
+    ADT_array_list(int cap): list_capacity(cap)
+    {
+        elm_ptr=new T [cap];
+    };
     ADT_array_list(int cap, const T &elm): list_capacity(cap), list_size(cap), elm_ptr(new T [cap])
-                                                    {int i=0;while(i!=cap)elm_ptr[i]=elm,i++;};
+    {
+        int i=0;
+        while(i!=cap)elm_ptr[i]=elm,i++;
+    };
     ADT_array_list(const std::vector<T> &);
-    ~ADT_array_list() {delete [] elm_ptr;};
+    ~ADT_array_list()
+    {
+        delete [] elm_ptr;
+    };
 
     //operators:
 
@@ -57,9 +66,18 @@ public:
 
     T &list_at(int index);
     const T &list_at(int index) const;
-    T &list_forward() const{return *elm_ptr;};
-    int size() const { return list_size;};
-    int capacity() const {return list_capacity;};
+    T &list_forward() const
+    {
+        return *elm_ptr;
+    };
+    int size() const
+    {
+        return list_size;
+    };
+    int capacity() const
+    {
+        return list_capacity;
+    };
     int find_index(const T&) const;
     void insert(int, const T&);
     void print(std::ostream &os)const;
@@ -100,7 +118,7 @@ ADT_array_list<T>::ADT_array_list(const ADT_array_list<T> &obj)
     elm_ptr=new T[list_capacity];
 
     for(int i=0; i!=list_capacity; i++)
-    *(elm_ptr+i)=*(obj.elm_ptr+i);
+        *(elm_ptr+i)=*(obj.elm_ptr+i);
 
 }
 
@@ -144,7 +162,7 @@ template<typename T>
 T &ADT_array_list<T>::list_at(int index)
 {
     if(!check_index(index))
-    throw "illegal index";
+        throw "illegal index";
     return elm_ptr[index];
 }
 
@@ -152,7 +170,7 @@ template<typename T>
 const T &ADT_array_list<T>::list_at(int index) const
 {
     if(!check_index(index))
-    throw "illegal index";
+        throw "illegal index";
     return elm_ptr[index];
 }
 
@@ -164,7 +182,7 @@ int ADT_array_list<T>::find_index(const T &elm)const
     while(cur!=elm_ptr+list_size)
     {
         if(*cur==elm)
-        return cur-elm_ptr;
+            return cur-elm_ptr;
         cur++;
     }
 
@@ -218,7 +236,7 @@ void ADT_array_list<T>::insert(int index, const T &obj)
     //copy backward:
 
     for(int i=list_size; i!=index; i--)
-    elm_ptr[i+1]=elm_ptr[i];
+        elm_ptr[i+1]=elm_ptr[i];
 
     elm_ptr[index]=obj;
 }
@@ -239,17 +257,17 @@ void ADT_array_list<T>::print(std::ostream &os) const
 template<typename T>
 void ADT_array_list<T>::trim_to_size()
 {
-     T *new_ptr;
-     new_ptr=new T[list_size];
+    T *new_ptr;
+    new_ptr=new T[list_size];
 
-     for(int i=0; i!=list_size; i++)
-     new_ptr[i]=elm_ptr[i];
+    for(int i=0; i!=list_size; i++)
+        new_ptr[i]=elm_ptr[i];
 
-     delete [] elm_ptr;
+    delete [] elm_ptr;
 
-     elm_ptr=new_ptr;
+    elm_ptr=new_ptr;
 
-     list_capacity=list_size;
+    list_capacity=list_size;
 
 }
 
@@ -342,10 +360,10 @@ template<typename T>
 bool ADT_array_list<T>::check_index(int index) const
 {
     if(index<0 || index>=list_size)
-    return false;
+        return false;
 
     else
-    return true;
+        return true;
 
 }
 
@@ -412,10 +430,10 @@ bool operator<(const ADT_array_list<T> &arr1, const ADT_array_list<T> &arr2)
     while(i!=arr1.size() && i!=arr2.size())
     {
         if(arr1.elm_ptr[i]<arr2.elm_ptr[i])
-        return true;
+            return true;
 
         if(arr1.elm_ptr[i]>arr2.elm_ptr[i])
-        return false;
+            return false;
 
         i++;
     }
@@ -442,7 +460,7 @@ public:
 
 
     ADT_chain_node()=default;
-    ADT_chain_node(const T &elm): elm(elm){};
+    ADT_chain_node(const T &elm): elm(elm) {};
     ADT_chain_node(const T &elm, ADT_chain_node *next): elm(elm), next(next) {};
 };
 
@@ -455,7 +473,7 @@ std::ostream &operator<< (std::ostream &os, const ADT_chain<T> &obj);
 template<typename T>
 class ADT_chain
 {
-friend std::ostream &operator<< <T>(std::ostream &os, const ADT_chain<T> &obj);
+    friend std::ostream &operator<< <T>(std::ostream &os, const ADT_chain<T> &obj);
 
 public:
     class iterator;
@@ -465,10 +483,20 @@ public:
     ADT_chain(const std::vector<T>&);
     ~ADT_chain();
 
-    iterator begin() {return iterator(head_node);}
+    iterator begin()
+    {
+        return iterator(head_node);
+    }
 
-    bool empty() const {return list_size==0;}
-    int size() const {;return list_size;}
+    bool empty() const
+    {
+        return list_size==0;
+    }
+    int size() const
+    {
+        ;
+        return list_size;
+    }
     T &at(int index);
     int index_of(const T &elm) const;
     void erase(int);
@@ -485,7 +513,10 @@ public:
     bool operator!=(ADT_chain);
 
 protected:
-    bool check_index(int index) {return (index>=0 && index<list_size);}
+    bool check_index(int index)
+    {
+        return (index>=0 && index<list_size);
+    }
     ADT_chain_node<T> *head_node=nullptr;
     int list_size=0;
 
@@ -500,7 +531,7 @@ ADT_chain<T>::ADT_chain(const ADT_chain<T> &obj)
     list_size=obj.list_size;
 
     if(list_size==0)
-    return;
+        return;
 
     ADT_chain_node<T> *source=obj.head_node;
     head_node=new ADT_chain_node<T>(source->elm);
@@ -508,8 +539,8 @@ ADT_chain<T>::ADT_chain(const ADT_chain<T> &obj)
     ADT_chain_node<T> *target=head_node;
 
     for(source=source->next;
-        source!=nullptr;
-        source=source->next, target=target->next)
+            source!=nullptr;
+            source=source->next, target=target->next)
         target->next=new ADT_chain_node<T>(source->elm);
 
     target->next=nullptr;
@@ -602,16 +633,37 @@ template<typename T>
 class ADT_chain<T>::iterator
 {
 public:
-    iterator(ADT_chain_node<T> *Node=nullptr):node(Node){};
+    iterator(ADT_chain_node<T> *Node=nullptr):node(Node) {};
 
-    T& operator*() const {return node->elm;};
-    T* operator->() const {return &node->elm;};
+    T& operator*() const
+    {
+        return node->elm;
+    };
+    T* operator->() const
+    {
+        return &node->elm;
+    };
 
-    iterator &operator++() {node=node->next; return *this;};
-    iterator &operator++(int) {iterator old=*this; node=node->next ;return old;};
+    iterator &operator++()
+    {
+        node=node->next;
+        return *this;
+    };
+    iterator &operator++(int)
+    {
+        iterator old=*this;
+        node=node->next ;
+        return old;
+    };
 
-    bool operator!=(const iterator right) const{return node!=right.node;}
-    bool operator==(const iterator right) const{return node==right.node;}
+    bool operator!=(const iterator right) const
+    {
+        return node!=right.node;
+    }
+    bool operator==(const iterator right) const
+    {
+        return node==right.node;
+    }
 
 protected:
 
@@ -649,7 +701,7 @@ void ADT_chain<T>::insert(int index, const T &obj)
         ADT_chain_node<T> *ptr=head_node;
 
         for(int i=0; i!=index-1; i++)
-        ptr=ptr->next;
+            ptr=ptr->next;
 
         ptr->next=new ADT_chain_node<T>(obj, ptr->next);
 
@@ -781,18 +833,24 @@ std::ostream &operator<< (std::ostream&, const ADT_vector_stack<T>&);
 
 template<typename T>
 class ADT_vector_stack: private std::vector<T>,
-                        public ADT_stack<T>
+    public ADT_stack<T>
 {
 
-friend std::ostream &operator<< <T>(std::ostream&, const ADT_vector_stack<T>&);
+    friend std::ostream &operator<< <T>(std::ostream&, const ADT_vector_stack<T>&);
 
 public:
 
     //ADT_vector_stack(int initial_capacity=10): vec
     ADT_vector_stack()=default;
     ADT_vector_stack(const std::vector<T> &obj);
-    bool empty() const { return std::vector<T>::empty(); };
-    int size() const { return std::vector<T>::size(); };
+    bool empty() const
+    {
+        return std::vector<T>::empty();
+    };
+    int size() const
+    {
+        return std::vector<T>::size();
+    };
     vector<T> to_vector();
     pair<ADT_vector_stack<T>, ADT_vector_stack<T>> devide();
     void combine(ADT_vector_stack<T> &);
@@ -891,7 +949,7 @@ pair <ADT_vector_stack<T>, ADT_vector_stack<T>> ADT_vector_stack<T>::devide()
     }
 
 
-      while(j!=size1)
+    while(j!=size1)
     {
         stc1.push(obj_copy.top());
 
@@ -933,12 +991,24 @@ class ADT_array_stack: public ADT_stack<T>
 public:
     //constructor:
     ADT_array_stack()=default;
-    ADT_array_stack(int capacity): stack_capacity(capacity) { stc_ptr=new T[capacity]; };
+    ADT_array_stack(int capacity): stack_capacity(capacity)
+    {
+        stc_ptr=new T[capacity];
+    };
     ADT_array_stack(vector<T>&);
-    ~ADT_array_stack() { delete stc_ptr;};
+    ~ADT_array_stack()
+    {
+        delete stc_ptr;
+    };
 
-    bool empty() const { return (stack_size==0); };
-    int size() const { return stack_size; };
+    bool empty() const
+    {
+        return (stack_size==0);
+    };
+    int size() const
+    {
+        return stack_size;
+    };
     T &top();
     void push(const T&);
     void pop();
@@ -997,7 +1067,7 @@ template<typename T>
 T &ADT_array_stack<T>::top()
 {
     if(empty())
-    throw " stack is empty";
+        throw " stack is empty";
 
     return stc_ptr[stack_size-1];
 }
@@ -1007,7 +1077,7 @@ template<typename T>
 void ADT_array_stack<T>::pop()
 {
     if(empty())
-    throw " stack is empty";
+        throw " stack is empty";
 
     delete (stc_ptr+stack_size-1);
 
@@ -1056,12 +1126,12 @@ template<typename T>
 class ADT_queue
 {
 public:
-	virtual bool empty() const = 0;
-	virtual int size() const = 0;
-	virtual T &front() = 0;
-	virtual T &back() = 0;
-	virtual void pop() = 0;
-	virtual void push(const T &obj) = 0;
+    virtual bool empty() const = 0;
+    virtual int size() const = 0;
+    virtual T &front() = 0;
+    virtual T &back() = 0;
+    virtual void pop() = 0;
+    virtual void push(const T &obj) = 0;
 
 };
 
@@ -1079,14 +1149,29 @@ class ADT_array_queue: public ADT_queue<T>
 
 public:
     ADT_array_queue()=default;
-    ADT_array_queue(int cap):queue_capacity(cap) {queue_ptr=new T[cap];}
-    ~ADT_array_queue() { delete []queue_ptr;}
+    ADT_array_queue(int cap):queue_capacity(cap)
+    {
+        queue_ptr=new T[cap];
+    }
+    ~ADT_array_queue()
+    {
+        delete []queue_ptr;
+    }
 
     bool empty() const;
     int size() const;
-    T &front() { return queue_ptr[queue_front];};
-    T &back(){return queue_ptr[queue_back];};
-    int capacity() const { return queue_capacity;}
+    T &front()
+    {
+        return queue_ptr[queue_front];
+    };
+    T &back()
+    {
+        return queue_ptr[queue_back];
+    };
+    int capacity() const
+    {
+        return queue_capacity;
+    }
     void pop();
     void push(const T&);
 
@@ -1138,7 +1223,7 @@ void ADT_array_queue<T>::pop()
     if(queue_back==queue_front)
         throw "queue is empty";
 
-   // int old_front=queue_front;
+    // int old_front=queue_front;
 
     queue_front=(queue_front+1)%queue_capacity;
 }
@@ -1199,13 +1284,13 @@ template<typename T>
 class ADT_binary_tree_node
 {
 
-friend std::ostream &operator<< <T>(std::ostream&, const ADT_binary_tree_node&);
+    friend std::ostream &operator<< <T>(std::ostream&, const ADT_binary_tree_node&);
 
 public:
 
     ADT_binary_tree_node(): left(nullptr), right(nullptr) {}
-    ADT_binary_tree_node(const T &key):elm(key), left(nullptr), right(nullptr){}
-    ADT_binary_tree_node(const T &key, ADT_binary_tree_node *theLeft, ADT_binary_tree_node *theRight):elm(key), left(theLeft), right(theRight){}
+    ADT_binary_tree_node(const T &key):elm(key), left(nullptr), right(nullptr) {}
+    ADT_binary_tree_node(const T &key, ADT_binary_tree_node *theLeft, ADT_binary_tree_node *theRight):elm(key), left(theLeft), right(theRight) {}
 
     T elm;
     ADT_binary_tree_node *left, *right;
@@ -1223,10 +1308,16 @@ std::ostream &operator<< (std::ostream &os, const ADT_binary_tree_node<T> &obj)
 //method:
 
 template<typename T>
-void print(ADT_binary_tree_node<T> *ptr) {cout << ptr->elm <<" ";}
+void print(ADT_binary_tree_node<T> *ptr)
+{
+    cout << ptr->elm <<" ";
+}
 
 template<typename T>
-void dispose(ADT_binary_tree_node<T> *t) {delete t;}
+void dispose(ADT_binary_tree_node<T> *t)
+{
+    delete t;
+}
 
 template<typename T>
 class ADT_binary_tree;
@@ -1241,7 +1332,7 @@ class ADT_binary_tree
 {
 
     //typedef void(*visiter)(ADT_binary_tree_node<T>*);
-friend void dispose<T>(ADT_binary_tree_node<T> *t);
+    friend void dispose<T>(ADT_binary_tree_node<T> *t);
 //friend std::ostream &operator << <T> (std::ostream&, const ADT_binary_tree<T>&);
 
 public:
@@ -1255,30 +1346,65 @@ public:
 
     ADT_binary_tree(ADT_binary_tree&);
 
-    ~ADT_binary_tree() {deroot(root);}
+    ADT_binary_tree(ADT_binary_tree_node<T> *ptr): root(ptr), tree_size(1) {}
 
-    bool empty()const {return tree_size==0;}
-    int size()const {return tree_size;}
+    ~ADT_binary_tree()
+    {
+        deroot(root);
+    }
 
-    template<typename F>
-    void pre_order(F visiter){preOrder(root, visiter);}
-
-    void pre_order(void(*visiter)(ADT_binary_tree_node<T>*)){ preOrder(root, visiter);}
-
-    template<typename F>
-    void in_order(F visiter){inOrder(root, visiter);}
-
-    void in_order(void(*visiter)(ADT_binary_tree_node<T>*)){ inOrder(root, visiter);}
-
-    template<typename F>
-    void post_order(F visiter){postOrder(root, visiter);}
-
-    void post_order(void(*visiter)(ADT_binary_tree_node<T>*)){ postOrder(root, visiter);}
+    bool empty()const
+    {
+        return tree_size==0;
+    }
+    int size()const
+    {
+        return tree_size;
+    }
 
     template<typename F>
-    void level_order(F visiter){levelOrder(root, visiter);}
+    void pre_order(F visiter)
+    {
+        preOrder(root, visiter);
+    }
 
-    void level_order(void(*visiter)(ADT_binary_tree_node<T>*)){levelOrder(root, visiter);}
+    void pre_order(void(*visiter)(ADT_binary_tree_node<T>*))
+    {
+        preOrder(root, visiter);
+    }
+
+    template<typename F>
+    void in_order(F visiter)
+    {
+        inOrder(root, visiter);
+    }
+
+    void in_order(void(*visiter)(ADT_binary_tree_node<T>*))
+    {
+        inOrder(root, visiter);
+    }
+
+    template<typename F>
+    void post_order(F visiter)
+    {
+        postOrder(root, visiter);
+    }
+
+    void post_order(void(*visiter)(ADT_binary_tree_node<T>*))
+    {
+        postOrder(root, visiter);
+    }
+
+    template<typename F>
+    void level_order(F visiter)
+    {
+        levelOrder(root, visiter);
+    }
+
+    void level_order(void(*visiter)(ADT_binary_tree_node<T>*))
+    {
+        levelOrder(root, visiter);
+    }
 
     int height() const;
 
@@ -1291,46 +1417,46 @@ public:
 
     bool operator==(ADT_binary_tree&);
 
-   // void print(std::ostream&);
+    // void print(std::ostream&);
 
 
 protected:
-    ADT_binary_tree_node<T>* root;
-    int tree_size;
+    ADT_binary_tree_node<T>* root=nullptr;
+    int tree_size=0;
 
     //static void (*visit)(ADT_binary_tree_node<T>*);
 
-     template<typename F>
-     void preOrder(ADT_binary_tree_node<T>* tree, F visiter);
+    template<typename F>
+    void preOrder(ADT_binary_tree_node<T>* tree, F visiter);
 
-     void preOrder(ADT_binary_tree_node<T>*, void(*visiter)(ADT_binary_tree_node<T>*));
+    void preOrder(ADT_binary_tree_node<T>*, void(*visiter)(ADT_binary_tree_node<T>*));
 
-     template<typename F>
-     void inOrder(ADT_binary_tree_node<T>* tree, F visiter);
+    template<typename F>
+    void inOrder(ADT_binary_tree_node<T>* tree, F visiter);
 
-     void inOrder(ADT_binary_tree_node<T>*, void(*visiter)(ADT_binary_tree_node<T>*));
+    void inOrder(ADT_binary_tree_node<T>*, void(*visiter)(ADT_binary_tree_node<T>*));
 
-     template<typename F>
-     void postOrder(ADT_binary_tree_node<T>* tree, F visiter);
+    template<typename F>
+    void postOrder(ADT_binary_tree_node<T>* tree, F visiter);
 
-     void postOrder(ADT_binary_tree_node<T>*, void(*visiter)(ADT_binary_tree_node<T>*));
+    void postOrder(ADT_binary_tree_node<T>*, void(*visiter)(ADT_binary_tree_node<T>*));
 
-     template<typename F>
-     void levelOrder(ADT_binary_tree_node<T> *ptr, F visiter);
+    template<typename F>
+    void levelOrder(ADT_binary_tree_node<T> *ptr, F visiter);
 
-     void levelOrder(ADT_binary_tree_node<T> *ptr, void(*visiter)(ADT_binary_tree_node<T>*));
+    void levelOrder(ADT_binary_tree_node<T> *ptr, void(*visiter)(ADT_binary_tree_node<T>*));
 
-     //void dispose(ADT_binary_tree_node<T> *t) {delete t;}
+    //void dispose(ADT_binary_tree_node<T> *t) {delete t;}
 
-     void create_tree(ADT_binary_tree_node<T> *&ptr, vector<T> &vec, int location);
+    void create_tree(ADT_binary_tree_node<T> *&ptr, vector<T> &vec, int location);
 
-     void copy_tree(ADT_binary_tree_node<T> *&ptr1, ADT_binary_tree_node<T> *&ptr2);
+    void copy_tree(ADT_binary_tree_node<T> *&ptr1, ADT_binary_tree_node<T> *&ptr2);
 
-     bool tree_cmp(ADT_binary_tree_node<T> *ptr1, ADT_binary_tree_node<T> *ptr2);//tree compare
+    bool tree_cmp(ADT_binary_tree_node<T> *ptr1, ADT_binary_tree_node<T> *ptr2);//tree compare
 
-     void tree_swp(ADT_binary_tree_node<T> *&ptr);
+    void tree_swp(ADT_binary_tree_node<T> *&ptr);
 
-     int tree_height(ADT_binary_tree_node<T> *ptr);
+    int tree_height(ADT_binary_tree_node<T> *ptr);
 
 };
 
@@ -1350,7 +1476,7 @@ template<typename T>
 bool ADT_binary_tree<T>::operator==(ADT_binary_tree<T> &another)
 {
     if(tree_size!=another.tree_size)
-      return false;
+        return false;
     return tree_cmp(root, another.root);
 }
 //method:
@@ -1362,7 +1488,7 @@ template<typename F>
 void ADT_binary_tree<T>::preOrder(ADT_binary_tree_node<T>* tree, F visiter)
 {
 
-     if(tree!=nullptr)
+    if(tree!=nullptr)
     {
 
         visiter(tree);
@@ -1380,7 +1506,7 @@ template<typename T>
 void ADT_binary_tree<T>::preOrder(ADT_binary_tree_node<T>* tree, void(*visiter)(ADT_binary_tree_node<T>*))
 {
 
-     if(tree!=nullptr)
+    if(tree!=nullptr)
     {
 
         visiter(tree);
@@ -1396,9 +1522,9 @@ void ADT_binary_tree<T>::preOrder(ADT_binary_tree_node<T>* tree, void(*visiter)(
 
 template<typename T>
 template<typename F>
-void ADT_binary_tree<T>::inOrder(ADT_binary_tree_node<T>* tree , F visiter)
+void ADT_binary_tree<T>::inOrder(ADT_binary_tree_node<T>* tree, F visiter)
 {
-     if(tree!=nullptr)
+    if(tree!=nullptr)
     {
         inOrder(tree->left, visiter);
 
@@ -1411,7 +1537,7 @@ void ADT_binary_tree<T>::inOrder(ADT_binary_tree_node<T>* tree , F visiter)
 }
 
 template<typename T>
-void ADT_binary_tree<T>::inOrder(ADT_binary_tree_node<T>* tree , void(*visiter)(ADT_binary_tree_node<T>*))
+void ADT_binary_tree<T>::inOrder(ADT_binary_tree_node<T>* tree, void(*visiter)(ADT_binary_tree_node<T>*))
 {
     if(tree!=nullptr)
     {
@@ -1459,47 +1585,47 @@ template<typename T>
 template<typename F>
 void ADT_binary_tree<T>::levelOrder(ADT_binary_tree_node<T> *ptr,  F visiter)
 {
-     deque<ADT_binary_tree_node<T>*> que;
+    deque<ADT_binary_tree_node<T>*> que;
 
-     while(ptr!=nullptr)
-     {
-         visiter(ptr);
+    while(ptr!=nullptr)
+    {
+        visiter(ptr);
 
-         if(ptr->left!=nullptr)
-         que.push_back(ptr->left);
+        if(ptr->left!=nullptr)
+            que.push_back(ptr->left);
 
-         if(ptr->right!=nullptr)
-         que.push_back(ptr->right);
+        if(ptr->right!=nullptr)
+            que.push_back(ptr->right);
 
-         if(!que.empty())
+        if(!que.empty())
             ptr=que.front(),
             que.pop_front();
-         else
+        else
             return;
-     }
+    }
 }
 
 template<typename T>
 void ADT_binary_tree<T>::levelOrder(ADT_binary_tree_node<T> *ptr,  void(*visiter)(ADT_binary_tree_node<T>*))
 {
-     deque<ADT_binary_tree_node<T>*> que;
+    deque<ADT_binary_tree_node<T>*> que;
 
-     while(ptr!=nullptr)
-     {
-         visiter(ptr);
+    while(ptr!=nullptr)
+    {
+        visiter(ptr);
 
-         if(ptr->left!=nullptr)
-         que.push_back(ptr->left);
+        if(ptr->left!=nullptr)
+            que.push_back(ptr->left);
 
-         if(ptr->right!=nullptr)
-         que.push_back(ptr->right);
+        if(ptr->right!=nullptr)
+            que.push_back(ptr->right);
 
-         if(!que.empty())
+        if(!que.empty())
             ptr=que.front(),
             que.pop_front();
-         else
+        else
             return;
-     }
+    }
 }
 
 template<typename T>
@@ -1603,15 +1729,15 @@ int ADT_binary_tree<T>::tree_height(ADT_binary_tree_node<T> *ptr)
 template<typename T>
 void ADT_binary_tree<T>::deroot(ADT_binary_tree_node<T> *root)
 {
-        ADT_binary_tree_node<T> *tmp=root;
+    ADT_binary_tree_node<T> *tmp=root;
 
-        if(tmp==nullptr)
-            return;
+    if(tmp==nullptr)
+        return;
 
-        deroot(tmp->left);
-        deroot(tmp->right);
+    deroot(tmp->left);
+    deroot(tmp->right);
 
-        delete tmp;
+    delete tmp;
 }
 
 //max_priority_queue
@@ -1645,11 +1771,23 @@ class ADT_max_heap: public ADT_max_priority_queue<T>
 public:
     ADT_max_heap()=default;
     ADT_max_heap(const initializer_list<T> &lst);
-    ~ADT_max_heap() { delete [] heap_ptr;}
+    ~ADT_max_heap()
+    {
+        delete [] heap_ptr;
+    }
 
-    bool empty() const{return (heap_size==0);}
-    int size() const{return heap_size;}
-    const T &top() const {return heap_ptr[0];}
+    bool empty() const
+    {
+        return (heap_size==0);
+    }
+    int size() const
+    {
+        return heap_size;
+    }
+    const T &top() const
+    {
+        return heap_ptr[0];
+    }
     void pop();
     void push(const T &elm);
 
@@ -1678,7 +1816,7 @@ ADT_max_heap<T>::ADT_max_heap(const initializer_list<T> &lst): heap_size(lst.siz
     }
 
     for(int j=heap_size/2-1; j>=0; j--)
-    max_heapify(j);
+        max_heapify(j);
 }
 
 //operator:
@@ -1737,8 +1875,8 @@ void ADT_max_heap<T>::push(const T &elm)
         //heap_size++;
         heap_capacity*=2;
 
-    for(int i=0; i!=heap_size; i++)
-        heap_ptr[i]=ptr1[i];
+        for(int i=0; i!=heap_size; i++)
+            heap_ptr[i]=ptr1[i];
     }
 
     int current=++heap_size;
@@ -1785,95 +1923,112 @@ void ADT_max_heap<T>::pop()
 
 
 template<typename T>
-class ADT_HBLT;
+class ADT_HBLT;  //height biased leftist tree
 
 template<typename T>
 class ADT_HBLT: public ADT_binary_tree<pair<T, int>>
 {
-template<typename T1> using node=ADT_binary_tree_node<pair<T1, int>>;
+    template<typename T1> using node=ADT_binary_tree_node<pair<T1, int>>;
 
 public:
-   void meld(ADT_HBLT &);
-   void push(const T &);
-   void pop();
+
+    ADT_HBLT(const initializer_list<T>&);
+    ADT_HBLT(node<T> *the_node): ADT_binary_tree<pair<T, int>>(the_node) {}
+    //ADT_HBlT(ADT_HBLT &obj): ADT_binary_tree<pair<T, int>>(obj) {}
+
+    void meld(ADT_HBLT &);
+    void push(const T &);
+    void pop();
 
 private:
-   void meld(node<T>*&,node<T>*&);
+    void meld(node<T>*&,node<T>*&);
 };
+
+//constructor:
+
+template<typename T>
+ADT_HBLT<T>::ADT_HBLT(const initializer_list<T> &obj)
+{
+    typename initializer_list<T>::iterator itr=obj.begin();
+
+    while(itr!=obj.end())
+    {
+       push(*itr);
+       itr++;
+    }
+}
 
 //method:
 
 template<typename T>
 void ADT_HBLT<T>::push(const T &obj)
 {
-   node<T> *new_node=new ADT_binary_tree_node<pair<T, int>>(make_pair(obj, 1));
+    node<T> *new_node=new ADT_binary_tree_node<pair<T, int>>(make_pair(obj, 1));
 
-   ADT_binary_tree<T> new_tree;
-   new_tree.root=&new_node;
-   new_tree.tree_size=1;
+    meld(this->root, new_node);
 
-   meld(new_tree);
+    this->tree_size++;
 }
 
 template<typename T>
 void ADT_HBLT<T>::pop()
 {
-   this->tree_size--;
-   meld(this->root->left, this->root->right);
+    this->tree_size--;
+    meld(this->root->left, this->root->right);
 
-   delete this->root;
-   this->root=this->root->left;
+    delete this->root;
+    this->root=this->root->left;
 }
 
 template<typename T>
-void ADT_HBLT<T>::meld(ADT_HBLT &another)
+void ADT_HBLT<T>::meld(ADT_HBLT<T> &another)
 {
-   meld(this->root, another.root);
+    meld(this->root, another.root);
 
-   this->tree_size+=another.tree_size;
+    this->tree_size+=another.tree_size;
 
-   another.root=nullptr;
-   another.tree_size=0;
+    another.root=nullptr;
+    another.tree_size=0;
 }
 
 template<typename T>
 void ADT_HBLT<T>::meld(node<T> *&tree1, node<T> *&tree2)
 {
-   if(tree1==nullptr)
-      return;
+    if(tree2==nullptr)
+        return;
 
-   if(tree2==nullptr)
-   {
-      tree1=tree2;
-      return;
-   }
+    if(tree1==nullptr)
+    {
+        tree1=tree2;
+        return;
+    }
 
-   if(tree1->elm.first < tree2->elm.first)
-   {
-      auto store=tree1;
-      tree1=tree2;
-      tree2=store;
-   }
-                               //let tree1->elm.first to be the maxima
-   meld(tree1->right, tree2);
+    if(tree1->elm.first < tree2->elm.first) //pair.first is elm
+    {
+        auto store=tree1;
+        tree1=tree2;
+        tree2=store;
+    }
+    //let tree1->elm.first to be the maxima
+    meld(tree1->right, tree2);
 
-   if(tree1->left==nullptr)
-   {
-      tree1->left=tree1->right;
-      tree1->right=nullptr;
-      tree1->elm.second=1;                  //if tree->left is null
-   }
+    if(tree1->left==nullptr)
+    {
+        tree1->left=tree1->right;
+        tree1->right=nullptr;
+        tree1->elm.second=1;                  //if tree->left is null
+    }
 
-   else
-   {
-      if(tree1->left->elm.second < tree1->right->elm.second)
-      {
-         auto store=tree1->left;
-         tree1=tree2;
-         tree2=store;                                 //if tree->left->second is lower
-      }
+    else
+    {
+        if( (tree1->left->elm).second < (tree1->right->elm).second )
+        {
+            auto store=tree1->left;
+            tree1->left=tree1->right;
+            tree1->right=store;                                 //if tree->left->second is lower
+        }
 
-      tree1->elm.second=tree1->right->elm.second+1;
-   }
+        (tree1->elm).second=((tree1->right)->elm).second+1;
+    }
 }
 #endif // ADT_H_INCLUDED

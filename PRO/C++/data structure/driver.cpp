@@ -8,12 +8,13 @@ using namespace std;
 
 int main()
 {
+    auto f=[](ADT_binary_tree_node<pair<int, int>> *ptr)->void{ cout << (ptr->elm).first << " "; };
 
-    ADT_max_heap<int> heap({98,12, 31, 31,44,12,45,78});
+    ADT_HBLT<int> the_tree({2,3,4,21,2,4,5,5,3,1,2,21,21,3,4,5});
 
-
-    cout << heap;
-    //tree.level_order(print);
+    the_tree.level_order(f);
+    //the_tree.level_order(f);
+    //the_tree.level_order(f);
 
     return 0;
 }
