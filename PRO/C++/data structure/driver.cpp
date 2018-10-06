@@ -8,12 +8,16 @@ using namespace std;
 
 int main()
 {
-    auto f=[](ADT_binary_tree_node<pair<int, int>> *ptr)->void{ cout << (ptr->elm).first << " "; };
+    //auto f=[](ADT_binary_tree_node<pair<int, int>> *ptr)->void{ cout << (ptr->elm).first << " "; };
 
-    ADT_HBLT<int> the_tree({2,3,4,21,2,4,5,5,3,1,2,21,21,3,4,5});
+    ADT_HBLT<int> the_tree({2,3,4,21,2,4,5,5,3,1,2,22,23,3,4,5});
 
-    the_tree.level_order(f);
-    //the_tree.level_order(f);
+    while(!the_tree.empty())
+    {
+       cout << the_tree.top() << " ";
+       the_tree.pop();
+    }
+
     //the_tree.level_order(f);
 
     return 0;

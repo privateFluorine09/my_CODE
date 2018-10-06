@@ -1740,6 +1740,7 @@ void ADT_binary_tree<T>::deroot(ADT_binary_tree_node<T> *root)
     delete tmp;
 }
 
+
 //max_priority_queue
 
 template<typename T>
@@ -1926,7 +1927,7 @@ template<typename T>
 class ADT_HBLT;  //height biased leftist tree
 
 template<typename T>
-class ADT_HBLT: public ADT_binary_tree<pair<T, int>>
+class ADT_HBLT: public ADT_binary_tree<pair<T, int>>, public ADT_max_priority_queue<T>
 {
     template<typename T1> using node=ADT_binary_tree_node<pair<T1, int>>;
 
@@ -1939,6 +1940,9 @@ public:
     void meld(ADT_HBLT &);
     void push(const T &);
     void pop();
+    bool empty() const { return ((this->root)==nullptr); }
+    const T &top() const{ return (this->root)->elm.first; }
+    int size() const{return this->tree_size; }
 
 private:
     void meld(node<T>*&,node<T>*&);
