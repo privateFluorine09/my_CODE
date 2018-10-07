@@ -2034,5 +2034,19 @@ void ADT_HBLT<T>::meld(node<T> *&tree1, node<T> *&tree2)
 
         (tree1->elm).second=((tree1->right)->elm).second+1;
     }
-}
+}:
+
+template<typename T1, typename T2>
+class ADT_BS_tree_virtual: public ADT_binary_tree<pair<T1, T2>>
+{
+public:
+
+   virtual ~ADT_BS_tree_virtual();
+   virtual insert(const T1 &key)=0;
+   virtual remove(const T1 &key)=0;
+   virtual search(const T1 &key) const=0;
+   virtual min() const=0;
+   virtual max() const=0;
+
+};
 #endif // ADT_H_INCLUDED
