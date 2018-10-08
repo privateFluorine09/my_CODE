@@ -2081,6 +2081,44 @@ protected:
 template<typename KEY, typename VAL>
 void ADT_BS_tree<KEY, VAL>::insert(const pair<const KEY, VAL> &pr)
 {
+   this->tree_size++;
+
+   if(this->root=nullptr)
+   {
+      node<KEY, VAL> *new_root=new node<KEY, VAL>(pr);
+      this->root=new_root;
+      return;
+   }
+
+   node<KEY, VAL> *ptr, *p_ptr; //p_ptr means ptr's parent
+
+   ptr=this->root, p_ptr=nullptr;
+
+   while(ptr!=nullptr)
+   {
+      p_ptr=ptr;
+
+      if(pr.first>(ptr->elm).first )
+         ptr=ptr->right;
+      else
+      {
+         if(pr.first==(ptr->elm).first)
+         {
+            (ptr->elm).second=pr.second;
+            return;
+         }
+
+         else
+            ptr=ptr->left;
+      }
+   }
+
+   node<KEY, VAL> *new_node=new node<KEY, VAL>(pr);
+
+   if(pr.first>(p_ptr->elm).first)
+      p_ptr->right=new_node;
+   else
+      p_ptr->left=new_node;
 
 }
 

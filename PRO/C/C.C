@@ -1,12 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-int main(int argc, char* argv[])
+int main(void)
 {
-
-    int n;
-    scanf("%d", &n);
-    printf("%s, %d", argv[n], argc);
-
+    printf("%d",sizeof(bool));
     return 0;
 }
