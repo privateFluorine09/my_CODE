@@ -2034,19 +2034,76 @@ void ADT_HBLT<T>::meld(node<T> *&tree1, node<T> *&tree2)
 
         (tree1->elm).second=((tree1->right)->elm).second+1;
     }
-}:
+}
+
+//BS tree:
 
 template<typename T1, typename T2>
-class ADT_BS_tree_virtual: public ADT_binary_tree<pair<T1, T2>>
+class ADT_BS_tree_virtual: public ADT_binary_tree<pair<const T1, T2>>
 {
 public:
 
    virtual ~ADT_BS_tree_virtual();
-   virtual insert(const T1 &key)=0;
-   virtual remove(const T1 &key)=0;
-   virtual search(const T1 &key) const=0;
-   virtual min() const=0;
-   virtual max() const=0;
+   virtual void insert(const T1 &key)=0;
+   virtual pair<const T1, T2> remove(const T1 &key)=0;
+   virtual pair<const T1, T2> &search(const T1 &key) const=0;
 
 };
+
+template<typename KEY, typename VAL>
+class ADT_BS_tree: public ADT_BS_tree_virtual<KEY, VAL>
+{
+   template<typename K, typename I> using node=ADT_binary_tree_node<pair<const K, I>>;
+   template<typename K, typename I> using tree=ADT_BS_tree<K, I>;
+
+public:
+   ADT_BS_tree(): ADT_binary_tree<pair<KEY, VAL>>(){}
+   //ADT_BS_tree(const vector<pair<const T1, T2>>)
+
+   void insert(const pair<const KEY, VAL>&);
+   pair<const KEY, VAL> remove(const KEY&);
+   pair<const KEY, VAL> &search(const KEY &key) const;
+
+
+
+
+protected:
+   //null object:
+   static const pair<const KEY, VAL> nil;
+
+};
+
+//constructors:
+
+//operators:
+
+//methods:
+template<typename KEY, typename VAL>
+void ADT_BS_tree<KEY, VAL>::insert(const pair<const KEY, VAL> &pr)
+{
+
+}
+
+template<typename KEY, typename VAL>
+pair<const KEY, VAL> &ADT_BS_tree<KEY, VAL>::search(const KEY &key) const
+{
+   node<KEY, VAL> *ptr=this->root;
+
+   while(ptr!=nullptr)
+   {
+      if(key<(ptr->elm).first)
+         ptr=ptr->left;
+      else
+      {
+         if(key==(ptr->elm).first)
+         return ptr->elm;
+
+         else
+            ptr=ptr->right;
+      }
+   }
+//nothing find, return the nil:
+   return nil;
+}
+
 #endif // ADT_H_INCLUDED
