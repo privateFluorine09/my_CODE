@@ -1940,9 +1940,18 @@ public:
     void meld(ADT_HBLT &);
     void push(const T &);
     void pop();
-    bool empty() const { return ((this->root)==nullptr); }
-    const T &top() const{ return (this->root)->elm.first; }
-    int size() const{return this->tree_size; }
+    bool empty() const
+    {
+        return ((this->root)==nullptr);
+    }
+    const T &top() const
+    {
+        return (this->root)->elm.first;
+    }
+    int size() const
+    {
+        return this->tree_size;
+    }
 
 private:
     void meld(node<T>*&,node<T>*&);
@@ -1957,8 +1966,8 @@ ADT_HBLT<T>::ADT_HBLT(const initializer_list<T> &obj)
 
     while(itr!=obj.end())
     {
-       push(*itr);
-       itr++;
+        push(*itr);
+        itr++;
     }
 }
 
@@ -2043,33 +2052,33 @@ class ADT_BS_tree_virtual: public ADT_binary_tree<pair<const T1, T2>>
 {
 public:
 
-   virtual ~ADT_BS_tree_virtual();
-   virtual void insert(const T1 &key)=0;
-   virtual pair<const T1, T2> remove(const T1 &key)=0;
-   virtual pair<const T1, T2> &search(const T1 &key) const=0;
+    virtual ~ADT_BS_tree_virtual();
+    virtual void insert(const T1 &key)=0;
+    virtual pair<const T1, T2> remove(const T1 &key)=0;
+    virtual pair<const T1, T2> &search(const T1 &key) const=0;
 
 };
 
 template<typename KEY, typename VAL>
 class ADT_BS_tree: public ADT_BS_tree_virtual<KEY, VAL>
 {
-   template<typename K, typename I> using node=ADT_binary_tree_node<pair<const K, I>>;
-   template<typename K, typename I> using tree=ADT_BS_tree<K, I>;
+    template<typename K, typename I> using node=ADT_binary_tree_node<pair<const K, I>>;
+    template<typename K, typename I> using tree=ADT_BS_tree<K, I>;
 
 public:
-   ADT_BS_tree(): ADT_binary_tree<pair<KEY, VAL>>(){}
-   //ADT_BS_tree(const vector<pair<const T1, T2>>)
+    ADT_BS_tree(): ADT_binary_tree<pair<KEY, VAL>>() {}
+    //ADT_BS_tree(const vector<pair<const T1, T2>>)
 
-   void insert(const pair<const KEY, VAL>&);
-   pair<const KEY, VAL> remove(const KEY&);
-   pair<const KEY, VAL> &search(const KEY &key) const;
+    void insert(const pair<const KEY, VAL>&);
+    pair<const KEY, VAL> remove(const KEY&);
+    pair<const KEY, VAL> &search(const KEY &key) const;
 
 
 
 
 protected:
-   //null object:
-   static const pair<const KEY, VAL> nil;
+    //null object:
+    static const pair<const KEY, VAL> nil;
 
 };
 
@@ -2081,67 +2090,150 @@ protected:
 template<typename KEY, typename VAL>
 void ADT_BS_tree<KEY, VAL>::insert(const pair<const KEY, VAL> &pr)
 {
-   this->tree_size++;
+    this->tree_size++;
 
-   if(this->root=nullptr)
-   {
-      node<KEY, VAL> *new_root=new node<KEY, VAL>(pr);
-      this->root=new_root;
-      return;
-   }
+    if(this->root=nullptr)
+    {
+        node<KEY, VAL> *new_root=new node<KEY, VAL>(pr);
+        this->root=new_root;
+        return;
+    }
 
-   node<KEY, VAL> *ptr, *p_ptr; //p_ptr means ptr's parent
+    node<KEY, VAL> *ptr, *p_ptr; //p_ptr means ptr's parent
 
-   ptr=this->root, p_ptr=nullptr;
+    ptr=this->root, p_ptr=nullptr;
 
-   while(ptr!=nullptr)
-   {
-      p_ptr=ptr;
+    while(ptr!=nullptr)
+    {
+        p_ptr=ptr;
 
-      if(pr.first>(ptr->elm).first )
-         ptr=ptr->right;
-      else
-      {
-         if(pr.first==(ptr->elm).first)
-         {
-            (ptr->elm).second=pr.second;
-            return;
-         }
+        if(pr.first>(ptr->elm).first )
+            ptr=ptr->right;
+        else
+        {
+            if(pr.first==(ptr->elm).first)
+            {
+                (ptr->elm).second=pr.second;
+                return;
+            }
 
-         else
-            ptr=ptr->left;
-      }
-   }
+            else
+                ptr=ptr->left;
+        }
+    }
 
-   node<KEY, VAL> *new_node=new node<KEY, VAL>(pr);
+    node<KEY, VAL> *new_node=new node<KEY, VAL>(pr);
 
-   if(pr.first>(p_ptr->elm).first)
-      p_ptr->right=new_node;
-   else
-      p_ptr->left=new_node;
+    if(pr.first>(p_ptr->elm).first)
+        p_ptr->right=new_node;
+    else
+        p_ptr->left=new_node;
 
 }
 
 template<typename KEY, typename VAL>
 pair<const KEY, VAL> &ADT_BS_tree<KEY, VAL>::search(const KEY &key) const
 {
-   node<KEY, VAL> *ptr=this->root;
+    node<KEY, VAL> *ptr=this->root;
 
-   while(ptr!=nullptr)
-   {
-      if(key<(ptr->elm).first)
-         ptr=ptr->left;
-      else
-      {
-         if(key==(ptr->elm).first)
-         return ptr->elm;
+    while(ptr!=nullptr)
+    {
+        if(key<(ptr->elm).first)
+            ptr=ptr->left;
+        else
+        {
+            if(key==(ptr->elm).first)
+                return ptr->elm;
 
-         else
-            ptr=ptr->right;
-      }
-   }
+            else
+                ptr=ptr->right;
+        }
+    }
 //nothing find, return the nil:
-   return nil;
+    return nil;
 }
 
+template<typename KEY, typename VAL>
+pair<const KEY, VAL> ADT_BS_tree<KEY, VAL>::remove(const KEY &the_key)
+{
+    pair<const KEY, VAL> to_remove;
+    node<KEY, VAL> *ptr, *p_ptr;
+    ptr=this->root, p_ptr=nullptr;
+
+    while(ptr!=nullptr && ptr->elm.first!=the_key)
+    {
+        p_ptr=ptr;
+
+        if(ptr->elm.first<the_key)
+        {
+            ptr=ptr->right;
+        }
+        else
+            ptr=ptr->left;
+    }
+
+    if(ptr==nullptr)
+        return nil;
+    else
+        to_remove=ptr->elm;
+
+    //if p_ptr has two children
+    if(p_ptr->left!=nullptr && p_ptr->right!=nullptr)
+    {
+        node<KEY, VAL> *ptr2, *p_ptr2;
+        ptr2=ptr->left, p_ptr2=nullptr;
+
+        while(ptr2->right!=nullptr)
+        {
+            p_ptr2=ptr2;
+            ptr2=ptr2->right;
+        }
+
+        node<KEY, VAL> *new_node= new node<KEY, VAL>(ptr2->elm, ptr->left, ptr->right);
+
+        if(p_ptr==nullptr)
+            this->root=new_node;
+
+        else
+        {
+            if(p_ptr->left==ptr)
+                p_ptr->left=new_node;
+            else
+                p_ptr->right=new_node;
+        }
+        delete ptr;
+
+        if(p_ptr2==ptr)
+            p_ptr=new_node;
+        else
+            p_ptr=p_ptr2;
+
+        ptr=ptr2;
+    }
+
+    //successfully replaced ptr or ptr has no more than one child
+
+    node<KEY, VAL> *ptr3;
+
+    if(ptr->left!=nullptr)
+        ptr3=ptr->left;
+    else
+        ptr3=ptr->right;
+
+    if(ptr==this->root)
+        this->root=ptr3;
+    else
+    {
+        if(ptr==p_ptr->left)
+            p_ptr->left=ptr3;
+        else
+            p_ptr->right=ptr3;
+    }
+
+    this->tree_size--;
+
+    delete ptr;
+
+    return to_remove;
+}
 #endif // ADT_H_INCLUDED
