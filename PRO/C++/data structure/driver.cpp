@@ -10,12 +10,14 @@ int main()
 {
     //auto f=[](ADT_binary_tree_node<pair<int, int>> *ptr)->void{ cout << (ptr->elm).first << " "; };
 
-    ADT_HBLT<int> the_tree({2,3,4,21,2,4,5,5,3,1,2,22,23,3,4,5});
+    ADT_BS_tree<int, int> dic;
 
-    while(!the_tree.empty())
+    int input=12;
+
+    while(input<102)
     {
-       cout << the_tree.top() << " ";
-       the_tree.pop();
+       dic.insert(make_pair(input, input));
+       input+=7;
     }
 
     //the_tree.level_order(f);

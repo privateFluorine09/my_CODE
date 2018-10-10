@@ -2053,34 +2053,34 @@ class ADT_BS_tree_virtual: public ADT_binary_tree<pair<const T1, T2>>
 public:
 
     virtual ~ADT_BS_tree_virtual();
-    virtual void insert(const T1 &key)=0;
+    virtual void insert(const pair<const T1, T2>&)=0;
     virtual pair<const T1, T2> remove(const T1 &key)=0;
     virtual pair<const T1, T2> &search(const T1 &key) const=0;
 
 };
 
 template<typename KEY, typename VAL>
-class ADT_BS_tree: public ADT_BS_tree_virtual<KEY, VAL>
+class ADT_BS_tree: public ADT_binary_tree<pair<const KEY, VAL>>
 {
     template<typename K, typename I> using node=ADT_binary_tree_node<pair<const K, I>>;
     template<typename K, typename I> using tree=ADT_BS_tree<K, I>;
 
 public:
-    ADT_BS_tree(): ADT_binary_tree<pair<KEY, VAL>>() {}
+    ADT_BS_tree()=default;
     //ADT_BS_tree(const vector<pair<const T1, T2>>)
 
     void insert(const pair<const KEY, VAL>&);
-    pair<const KEY, VAL> remove(const KEY&);
-    pair<const KEY, VAL> &search(const KEY &key) const;
+    void remove(const KEY);
+    pair<const KEY, VAL> search(const KEY &key) const;
 
 
-
+    //pair<const KEY, VAL> nil;
 
 protected:
-    //null object:
-    static const pair<const KEY, VAL> nil;
+    const pair<const KEY, VAL> nil;
 
 };
+
 
 //constructors:
 
@@ -2092,9 +2092,9 @@ void ADT_BS_tree<KEY, VAL>::insert(const pair<const KEY, VAL> &pr)
 {
     this->tree_size++;
 
-    if(this->root=nullptr)
+    if(this->root==nullptr)
     {
-        node<KEY, VAL> *new_root=new node<KEY, VAL>(pr);
+        node<KEY, VAL> *new_root=new ADT_binary_tree_node<pair<const KEY, VAL>>(pr);
         this->root=new_root;
         return;
     }
@@ -2122,7 +2122,7 @@ void ADT_BS_tree<KEY, VAL>::insert(const pair<const KEY, VAL> &pr)
         }
     }
 
-    node<KEY, VAL> *new_node=new node<KEY, VAL>(pr);
+    auto new_node=new ADT_binary_tree_node<pair<const KEY, VAL>>(pr);
 
     if(pr.first>(p_ptr->elm).first)
         p_ptr->right=new_node;
@@ -2132,7 +2132,7 @@ void ADT_BS_tree<KEY, VAL>::insert(const pair<const KEY, VAL> &pr)
 }
 
 template<typename KEY, typename VAL>
-pair<const KEY, VAL> &ADT_BS_tree<KEY, VAL>::search(const KEY &key) const
+pair<const KEY, VAL> ADT_BS_tree<KEY, VAL>::search(const KEY &key) const
 {
     node<KEY, VAL> *ptr=this->root;
 
@@ -2154,9 +2154,9 @@ pair<const KEY, VAL> &ADT_BS_tree<KEY, VAL>::search(const KEY &key) const
 }
 
 template<typename KEY, typename VAL>
-pair<const KEY, VAL> ADT_BS_tree<KEY, VAL>::remove(const KEY &the_key)
+void ADT_BS_tree<KEY, VAL>::remove(const KEY the_key)
 {
-    pair<const KEY, VAL> to_remove;
+    //pair<const KEY, VAL> to_remove;
     node<KEY, VAL> *ptr, *p_ptr;
     ptr=this->root, p_ptr=nullptr;
 
@@ -2172,10 +2172,6 @@ pair<const KEY, VAL> ADT_BS_tree<KEY, VAL>::remove(const KEY &the_key)
             ptr=ptr->left;
     }
 
-    if(ptr==nullptr)
-        return nil;
-    else
-        to_remove=ptr->elm;
 
     //if p_ptr has two children
     if(p_ptr->left!=nullptr && p_ptr->right!=nullptr)
@@ -2234,6 +2230,6 @@ pair<const KEY, VAL> ADT_BS_tree<KEY, VAL>::remove(const KEY &the_key)
 
     delete ptr;
 
-    return to_remove;
+    //return to_remove;
 }
 #endif // ADT_H_INCLUDED
