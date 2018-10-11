@@ -2072,7 +2072,8 @@ public:
     void insert(const pair<const KEY, VAL>&);
     void remove(const KEY);
     pair<const KEY, VAL> search(const KEY &key) const;
-
+    pair<const KEY, VAL> min()const;
+    pair<const KEY, VAL> max()const;
 
     //pair<const KEY, VAL> nil;
 
@@ -2232,4 +2233,48 @@ void ADT_BS_tree<KEY, VAL>::remove(const KEY the_key)
 
     //return to_remove;
 }
+
+template<typename KEY, typename VAL>
+pair<const KEY, VAL> ADT_BS_tree<KEY, VAL>::min()const
+{
+   node<KEY, VAL> *ptr=this->root;
+
+   while(ptr->left!=nullptr)
+   {
+      ptr=ptr->left;
+   }
+
+   return ptr->elm;
+}
+
+template<typename KEY, typename VAL>
+pair<const KEY, VAL> ADT_BS_tree<KEY, VAL>::max()const
+{
+   node<KEY, VAL> *ptr=this->root;
+
+   while(ptr->right!=nullptr)
+   {
+      ptr=ptr->right;
+   }
+
+   return ptr->elm;
+}
+
+//start for RB tree??
+
+template<typename T>
+struct ADT_RBtree_node
+{
+   template<typename T1> using node=ADT_RBtree_node<T1>;
+
+   ADT_RBtree_node()=default;
+   ADT_RBtree_node(const T &val, const bool &color): elm(val), isBlack(color) {}
+   ADT_RBtree_node(const T &val, const bool &color, node<T> *ptr1, node<T> *ptr2, node<T> *ptr3): elm(val), isBlack(color), prt(ptr1), left(ptr2), right(ptr3) {}
+   //prt1: parent parameter , ptr2: left chid, ptr3: right child
+
+   bool isBlack=true;
+   T elm;
+
+   node<T> *prt=nullptr, *left=nullptr, *right=nullptr;
+};
 #endif // ADT_H_INCLUDED

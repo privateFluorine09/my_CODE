@@ -30,5 +30,7 @@ int main()
 
     cout << (the_tree.search(33)).second << endl;
 
+    cout << (the_tree.max()).first;
+
     return 0;
 }
