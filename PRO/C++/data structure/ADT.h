@@ -2237,44 +2237,156 @@ void ADT_BS_tree<KEY, VAL>::remove(const KEY the_key)
 template<typename KEY, typename VAL>
 pair<const KEY, VAL> ADT_BS_tree<KEY, VAL>::min()const
 {
-   node<KEY, VAL> *ptr=this->root;
+    node<KEY, VAL> *ptr=this->root;
 
-   while(ptr->left!=nullptr)
-   {
-      ptr=ptr->left;
-   }
+    while(ptr->left!=nullptr)
+    {
+        ptr=ptr->left;
+    }
 
-   return ptr->elm;
+    return ptr->elm;
 }
 
 template<typename KEY, typename VAL>
 pair<const KEY, VAL> ADT_BS_tree<KEY, VAL>::max()const
 {
-   node<KEY, VAL> *ptr=this->root;
+    node<KEY, VAL> *ptr=this->root;
 
-   while(ptr->right!=nullptr)
-   {
-      ptr=ptr->right;
-   }
+    while(ptr->right!=nullptr)
+    {
+        ptr=ptr->right;
+    }
 
-   return ptr->elm;
+    return ptr->elm;
 }
 
 //start for RB tree??
 
+//defination for nodes
 template<typename T>
 struct ADT_RBtree_node
 {
-   template<typename T1> using node=ADT_RBtree_node<T1>;
+    template<typename T1> using node=ADT_RBtree_node<T1>;
 
-   ADT_RBtree_node()=default;
-   ADT_RBtree_node(const T &val, const bool &color): elm(val), isBlack(color) {}
-   ADT_RBtree_node(const T &val, const bool &color, node<T> *ptr1, node<T> *ptr2, node<T> *ptr3): elm(val), isBlack(color), prt(ptr1), left(ptr2), right(ptr3) {}
-   //prt1: parent parameter , ptr2: left chid, ptr3: right child
+    ADT_RBtree_node()=default;
+    ADT_RBtree_node(const T &val, const bool &color): elm(val), isBlack(color) {}
+    ADT_RBtree_node(const T &val, const bool &color, node<T> *ptr1, node<T> *ptr2, node<T> *ptr3): elm(val), isBlack(color), prt(ptr1), left(ptr2), right(ptr3) {}
+    //prt1: parent parameter , ptr2: left chid, ptr3: right child
 
-   bool isBlack=true;
-   T elm;
+    bool isBlack=true;
+    T elm;
 
-   node<T> *prt=nullptr, *left=nullptr, *right=nullptr;
+    node<T> *prt=nullptr, *left=nullptr, *right=nullptr;
 };
+
+//defination for the tree
+template<typename T>
+class ADT_RB_tree
+{
+    template<typename T1> using node=ADT_RBtree_node<T1>;
+    template<typename T2> using tree=ADT_RB_tree<T2>;
+
+public:
+    ADT_RB_tree()=default;
+    ~ADT_RB_tree()
+    {
+        unroot(root);
+    }
+
+
+    template<typename F>
+    void pre_order(F visitor)
+    {
+        pre_order(visitor, root);
+    }
+
+    template<typename F>
+    void in_order(F visitor)
+    {
+        in_order(visitor, root);
+    }
+
+    template<typename F>
+    void post_order(F visitor)
+    {
+        post_order(visitor, root);
+    }
+
+    template<typename F>
+    void level_order(F visitor);
+
+private:
+    node<T> *root=nullptr;
+    size_t tree_size=0;
+
+    void unroot(node<T> *root);
+
+    template<typename F>
+    void pre_order(F visitor, node<T> *ptr);
+
+    template<typename F>
+    void in_order(Fvisitor, node<T> *ptr);
+
+    template<typename F>
+    void post_order(F visitor, node<T> *ptr);
+
+    //template<typename F>
+    //void level_order(F visitor, node<T> *ptr);
+};
+//operator:
+
+//constructor:
+
+//method:
+template<typename T>
+void ADT_RB_tree<T>::unroot(node<T> *the_root)
+{
+    if(the_root==nullptr)
+        return;
+    else
+        delete the_root;
+
+    unroot(the_root->left);
+    unroot(the_root->right);
+}
+
+template<typename T>
+template<typename F>
+void ADT_RB_tree<T>::pre_order(F visitor, node<T> *ptr)
+{
+    if(ptr!=nullptr)
+        visitor(ptr);//visitor must be a (node*)->returnType;
+    else
+        return;
+
+    pre_order(visitor, ptr->left);
+    pre_order(visitor, ptr->right);
+}
+
+template<typename T>
+template<typename F>
+void ADT_RB_tree<T>::in_order(F visitor, node<T> *ptr)
+{
+    if(ptr!=nullptr)
+        visitor(ptr);//visitor must be a (node*)->returnType;
+    else
+        return;
+
+    in_order(visitor, ptr->left);
+    in_order(visitor, ptr->right);
+}
+
+template<typename T>
+template<typename F>
+void ADT_RB_tree<T>::post_order(F visitor, node<T> *ptr)
+{
+    if(ptr!=nullptr)
+        visitor(ptr);//visitor must be a (node*)->returnType;
+    else
+        return;
+
+    post_order(visitor, ptr->left);
+    post_order(visitor, ptr->right);
+}
+
 #endif // ADT_H_INCLUDED
