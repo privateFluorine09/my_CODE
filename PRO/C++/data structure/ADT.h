@@ -4,6 +4,7 @@
 
 #include<string>
 #include<initializer_list>
+#include<queue>
 #include<deque>
 #include<vector>
 #include<utility>
@@ -12,6 +13,9 @@
 using namespace std;
 
 //for C++11 only
+
+
+//This code is totally crap and shit, needs time to improve. //20181012
 
 
 // need a erase and a pop_back
@@ -2279,7 +2283,10 @@ struct ADT_RBtree_node
     node<T> *prt=nullptr, *left=nullptr, *right=nullptr;
 };
 
+
 //defination for the tree
+
+
 template<typename T>
 class ADT_RB_tree
 {
@@ -2315,6 +2322,15 @@ public:
     template<typename F>
     void level_order(F visitor);
 
+    inline size_t size() const
+    {
+        return tree_size;
+    }
+
+    //in progress: left rotate , right rotate, and fix_up
+
+
+
 private:
     node<T> *root=nullptr;
     size_t tree_size=0;
@@ -2325,7 +2341,7 @@ private:
     void pre_order(F visitor, node<T> *ptr);
 
     template<typename F>
-    void in_order(Fvisitor, node<T> *ptr);
+    void in_order(F visitor, node<T> *ptr);
 
     template<typename F>
     void post_order(F visitor, node<T> *ptr);
@@ -2341,13 +2357,13 @@ private:
 template<typename T>
 void ADT_RB_tree<T>::unroot(node<T> *the_root)
 {
+    unroot(the_root->left);
+    unroot(the_root->right);
+
     if(the_root==nullptr)
         return;
     else
         delete the_root;
-
-    unroot(the_root->left);
-    unroot(the_root->right);
 }
 
 template<typename T>
@@ -2367,12 +2383,13 @@ template<typename T>
 template<typename F>
 void ADT_RB_tree<T>::in_order(F visitor, node<T> *ptr)
 {
-    if(ptr!=nullptr)
-        visitor(ptr);//visitor must be a (node*)->returnType;
-    else
+    if(ptr==nullptr)
         return;
 
     in_order(visitor, ptr->left);
+
+    visitor(ptr);
+
     in_order(visitor, ptr->right);
 }
 
@@ -2380,13 +2397,42 @@ template<typename T>
 template<typename F>
 void ADT_RB_tree<T>::post_order(F visitor, node<T> *ptr)
 {
-    if(ptr!=nullptr)
-        visitor(ptr);//visitor must be a (node*)->returnType;
-    else
+    if(ptr==nullptr)
         return;
 
     post_order(visitor, ptr->left);
     post_order(visitor, ptr->right);
+
+    visitor(ptr);
 }
 
+template<typename T>
+template<typename F>
+void ADT_RB_tree<T>::level_order(F visiter)
+{
+    if(root==nullptr)
+        return;
+
+    queue<node<T>*> ptrQue;
+
+    node<T> *cur=nullptr;
+
+    ptrQue.push(root);
+
+    while(!ptrQue.empty())
+    {
+        cur=ptrQue.front();
+
+        visiter(cur);
+
+        ptrQue.pop();
+
+        if(cur->left!=nullptr)
+            ptrQue.push(cur->left);
+
+        if(cur->right!=nullptr)
+            ptrQue.push(cur->right);
+    }
+
+}
 #endif // ADT_H_INCLUDED

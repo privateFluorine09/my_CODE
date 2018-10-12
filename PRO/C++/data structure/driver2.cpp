@@ -8,29 +8,23 @@ using namespace std;
 
 int main()
 {
-    vector<int> vec= {3,2,5,4,33,55,123};
+    ADT_RB_tree<int> the_tree;
 
-    auto itr=vec.begin();
-
-    ADT_BS_tree<int, int> the_tree;
-
-    while(itr!=vec.end())
+    auto func=[](ADT_RBtree_node<int> *ptr)->void
     {
-        pair<int, int> pr=make_pair(*itr, 1);
-        the_tree.insert(pr);
-        itr++;
-    }
-
-    auto visiter=[](ADT_binary_tree_node<pair<const int, int>> *ptr)
-    {
-        cout << ptr->elm.first << " ";
+        cout << ptr->elm << " ";
     };
 
-    the_tree.level_order(visiter);
+    the_tree.pre_order(func);
+    cout << endl;
 
-    cout << (the_tree.search(33)).second << endl;
+    the_tree.in_order(func);
+    cout << endl;
 
-    cout << (the_tree.max()).first;
+    the_tree.post_order(func);
+    cout << endl;
+
+    //maybe something else test
 
     return 0;
 }
