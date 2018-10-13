@@ -2273,11 +2273,12 @@ struct ADT_RBtree_node
     template<typename T1> using node=ADT_RBtree_node<T1>;
 
     ADT_RBtree_node()=default;
-    ADT_RBtree_node(const T &val, const bool &color): elm(val), isBlack(color) {}
-    ADT_RBtree_node(const T &val, const bool &color, node<T> *ptr1, node<T> *ptr2, node<T> *ptr3): elm(val), isBlack(color), parent(ptr1), left(ptr2), right(ptr3) {}
+    ADT_RBtree_node(const bool &color): is_black(color) {}
+    ADT_RBtree_node(const T &val, const bool &color): elm(val), is_black(color) {}
+    ADT_RBtree_node(const T &val, const bool &color, node<T> *ptr1, node<T> *ptr2, node<T> *ptr3): elm(val), is_black(color), parent(ptr1), left(ptr2), right(ptr3) {}
     //parent: parent parameter , ptr2: left chid, ptr3: right child
 
-    bool isBlack=true;
+    bool is_black=true;
     T elm;
 
     node<T> *parent=nullptr, *left=nullptr, *right=nullptr;
@@ -2290,10 +2291,11 @@ struct ADT_RBtree_node
 template<typename T>
 class ADT_RB_tree
 {
+public:
+
     template<typename T1> using node=ADT_RBtree_node<T1>;
     template<typename T2> using tree=ADT_RB_tree<T2>;
 
-public:
     ADT_RB_tree()=default;
     ~ADT_RB_tree()
     {
@@ -2327,12 +2329,12 @@ public:
         return tree_size;
     }
 
-    //in progress: left rotate , right rotate, and fix_up
+    //in progress:right rotate, and fix_up
 
 
 
 private:
-    node<T> *root=nullptr;
+    node<T> *root=nilptr;
     size_t tree_size=0;
 
     void unroot(node<T> *root);
@@ -2350,9 +2352,17 @@ private:
 
     void right_rotate(node<T> *ptr);
 
-    //template<typename F>
-    //void level_order(F visitor, node<T> *ptr);
+    static const node<T> nil;
+
+    static const node<T>* const nilptr;
 };
+//static member:
+template<typename T>
+const ADT_RBtree_node<T> ADT_RB_tree<T>::nil(true);
+
+template<typename T>
+const ADT_RBtree_node<T>* const ADT_RB_tree<T>::nilptr=&nil;
+
 //operator:
 
 //constructor:
@@ -2364,7 +2374,7 @@ void ADT_RB_tree<T>::unroot(node<T> *the_root)
     unroot(the_root->left);
     unroot(the_root->right);
 
-    if(the_root==nullptr)
+    if(the_root==nilptr)
         return;
     else
         delete the_root;
@@ -2374,7 +2384,7 @@ template<typename T>
 template<typename F>
 void ADT_RB_tree<T>::pre_order(F visitor, node<T> *ptr)
 {
-    if(ptr!=nullptr)
+    if(ptr!=nilptr)
         visitor(ptr);//visitor must be a (node*)->returnType;
     else
         return;
@@ -2387,7 +2397,7 @@ template<typename T>
 template<typename F>
 void ADT_RB_tree<T>::in_order(F visitor, node<T> *ptr)
 {
-    if(ptr==nullptr)
+    if(ptr==nilptr)
         return;
 
     in_order(visitor, ptr->left);
@@ -2401,7 +2411,7 @@ template<typename T>
 template<typename F>
 void ADT_RB_tree<T>::post_order(F visitor, node<T> *ptr)
 {
-    if(ptr==nullptr)
+    if(ptr==nilptr)
         return;
 
     post_order(visitor, ptr->left);
@@ -2414,12 +2424,12 @@ template<typename T>
 template<typename F>
 void ADT_RB_tree<T>::level_order(F visiter)
 {
-    if(root==nullptr)
+    if(root==nilptr)
         return;
 
     queue<node<T>*> ptrQue;
 
-    node<T> *cur=nullptr;
+    node<T> *cur=nilptr;
 
     ptrQue.push(root);
 
@@ -2431,10 +2441,10 @@ void ADT_RB_tree<T>::level_order(F visiter)
 
         ptrQue.pop();
 
-        if(cur->left!=nullptr)
+        if(cur->left!=nilptr)
             ptrQue.push(cur->left);
 
-        if(cur->right!=nullptr)
+        if(cur->right!=nilptr)
             ptrQue.push(cur->right);
     }
 
@@ -2443,30 +2453,61 @@ void ADT_RB_tree<T>::level_order(F visiter)
 template<typename T>
 void ADT_RB_tree<T>::left_rotate(node<T> *ptr)
 {
-    if(ptr->right==nullptr)
+    if(ptr->right==nilptr)
         return;
 
     node<T> *lower=ptr->right;
-    // the "ptr" parameter is the root.
 
-    //deal with the lower:
-    lower->left=ptr;
+    if(lower->left!=nilptr)
+    {
+        lower->left->parent=ptr;
+    }
+
+    ptr->right=lower->left;
     lower->parent=ptr->parent;
 
+    if(ptr->parent==nilptr)
+        root=lower;
 
-    if(ptr->parent!=nullptr)
+    else
     {
         if(ptr==ptr->parent->left)
             ptr->parent->left=lower;
         else
             ptr->parent->right=lower;
     }
-    else
-        root=lower;
 
-    //deal with the ptr:
-    ptr->right=lower->left;
+    lower->left=ptr;
     ptr->parent=lower;
 
 }
-#endif // ADT_H_INCLUDED
+
+
+//need to re-write
+template<typename T>
+void ADT_RB_tree<T>::right_rotate(node<T> *ptr)
+{
+    if(ptr->left==nilptr)
+        return;
+
+    node<T> *lower=ptr->left;
+
+    ptr->left=lower->right
+              lower->right=ptr;
+    lower->parent=ptr->parent;
+
+    if(ptr->parent!=nilptr)
+    {
+        if(ptr==ptr->parent->left)
+            ptr->parent->left=lower;
+        else
+            ptr->parent->right=lower;
+
+    }
+    else
+        root=lower;
+
+    ptr->parent=lower;
+
+}
+#endif //
