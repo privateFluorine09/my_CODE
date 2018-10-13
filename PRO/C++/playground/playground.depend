@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1539408736 source:c:\users\wzm07\pro\c++\playground\build as will.cpp
+	<iostream>
+	<cstdlib>
+	<cstdio>
+	<vector>
+	<initializer_list>
+	<algorithm>
+	<iterator>
+

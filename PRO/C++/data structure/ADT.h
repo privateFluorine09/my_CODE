@@ -2274,13 +2274,13 @@ struct ADT_RBtree_node
 
     ADT_RBtree_node()=default;
     ADT_RBtree_node(const T &val, const bool &color): elm(val), isBlack(color) {}
-    ADT_RBtree_node(const T &val, const bool &color, node<T> *ptr1, node<T> *ptr2, node<T> *ptr3): elm(val), isBlack(color), prt(ptr1), left(ptr2), right(ptr3) {}
-    //prt1: parent parameter , ptr2: left chid, ptr3: right child
+    ADT_RBtree_node(const T &val, const bool &color, node<T> *ptr1, node<T> *ptr2, node<T> *ptr3): elm(val), isBlack(color), parent(ptr1), left(ptr2), right(ptr3) {}
+    //parent: parent parameter , ptr2: left chid, ptr3: right child
 
     bool isBlack=true;
     T elm;
 
-    node<T> *prt=nullptr, *left=nullptr, *right=nullptr;
+    node<T> *parent=nullptr, *left=nullptr, *right=nullptr;
 };
 
 
@@ -2345,6 +2345,10 @@ private:
 
     template<typename F>
     void post_order(F visitor, node<T> *ptr);
+
+    void left_rotate(node<T> *ptr);
+
+    void right_rotate(node<T> *ptr);
 
     //template<typename F>
     //void level_order(F visitor, node<T> *ptr);
@@ -2433,6 +2437,36 @@ void ADT_RB_tree<T>::level_order(F visiter)
         if(cur->right!=nullptr)
             ptrQue.push(cur->right);
     }
+
+}
+
+template<typename T>
+void ADT_RB_tree<T>::left_rotate(node<T> *ptr)
+{
+    if(ptr->right==nullptr)
+        return;
+
+    node<T> *lower=ptr->right;
+    // the "ptr" parameter is the root.
+
+    //deal with the lower:
+    lower->left=ptr;
+    lower->parent=ptr->parent;
+
+
+    if(ptr->parent!=nullptr)
+    {
+        if(ptr==ptr->parent->left)
+            ptr->parent->left=lower;
+        else
+            ptr->parent->right=lower;
+    }
+    else
+        root=lower;
+
+    //deal with the ptr:
+    ptr->right=lower->left;
+    ptr->parent=lower;
 
 }
 #endif // ADT_H_INCLUDED
