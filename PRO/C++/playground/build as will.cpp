@@ -6,39 +6,131 @@
 #include<algorithm>
 #include<iterator>
 
-//
-
 using namespace std;
 
-class base
+template<typename T>
+class linkedList;
+
+template<typename T>
+struct node
 {
-   int num1=2;
-   int num2=2;
-   int num3=4;
+   node()=default;
+   node(const T &obj): element(obj) {}
+   node(const T &obj, node *ptr1, node *ptr2): element(obj), prev(ptr1), next(ptr2) {}
+
+   T element;
+   node *prev=nullptr;
+   node *next=nullptr;
 };
 
-class derived1: public base
+template<typename T>
+std::ostream &operator<< (std::ostream&, const linkedList<T>&);
+
+template<typename T>
+class linkedList
 {
-   int num4=2;
+   friend std::ostream &operator<< <T> (std::ostream&, const linkedList<T>&);
 
 public:
+   linkedList()=default;
+   linkedList(const linkedList&);
+   linkedList(const initializer_list<T>&);
+   ~linkedList();
 
-   inline result()
+   inline size_t size()const
    {
-      return num1;
+      return listSize;
    }
+
+   const T &operator[](const size_t)const;
+   T &operator[](const size_t);
+
+   void reverse();
+
+   const T &max()const;
+   const T &min()const;
+
+
+private:
+   node<T> *head=new node<T>();
+   size_t listSize=0;
 };
 
-class derived2: private base
+//finish this class:
+
+template<typename T>
+linkedList<T>::linkedList(const initializer_list<T> &theList)
 {
-   int num4=2;
-};
+   auto itr=theList.begin();
+
+   while(itr!=theList.end())
+   {
+      head->next=new node<T>(*itr, head, nullptr);
+
+      itr++;
+      head=head->next;
+   }
+}
+
+template<typename T>
+linkedList<T>::linkedList(const linkedList<T> &obj)
+{
+   node<T> *ptr=(obj.head)->next;
+   node<T> *cur=head;
+
+   while(ptr!=nullptr)
+   {
+      cur->next=new node<T>(ptr->element, cur, nullptr);
+
+      cur=cur->next;
+      ptr=ptr->next;
+   }
+
+}
+
+template<typename T>
+const T &linkedList<T>::operator[](const size_t index) const
+{
+   size_t curIndex=0;
+
+   node<T> *curPtr=head->next;
+
+   while(curPtr!=nullptr && curIndex!=index)
+   {
+      curIndex++;
+      curPtr=curPtr->next;
+   }
+
+   if(curPtr==nullptr)
+   {
+      throw " ";
+
+   }
+   return curPtr->element;
+}
+
+template<typename T>
+T &linkedList<T>::operator[](const size_t index)
+{
+   size_t curIndex=0;
+
+   node<T> *curPtr=head->next;
+
+   while(curPtr!=nullptr && curIndex!=index)
+   {
+      curIndex++;
+      curPtr=curPtr->next;
+   }
+
+   if(curPtr==nullptr)
+   {
+      throw " ";
+   }
+   return curPtr->element;
+}
 
 int main()
 {
-   cout << sizeof(int) << " ";
-
-   cout << sizeof(base) << " " << sizeof(derived1) << " " << sizeof(derived2) << endl;
 
    return 0;
 }
