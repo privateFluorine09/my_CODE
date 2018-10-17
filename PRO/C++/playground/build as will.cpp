@@ -1,55 +1,42 @@
 #include<iostream>
-#include<cstdlib>
-#include<initializer_list>
+#include<sstream>
 #include<string>
-#include<vector>
-#include<utility>
-#include<memory>
 
 using namespace std;
 
-//1:
-template<typename Itr>
-struct Printer
+//下面我们用一个简单的程序示例来演示怎么输出Hello World
+
+template<typename T>
+class Printer
 {
-    ostream &operator() (const Itr &bi, const Itr &ei, ostream &os)const //bi means begin iterator
-    {
-        auto itr=bi;
+public:
 
-        while(itr!=ei)
-        {
-            os<< *itr << " ";
-            itr++;
-        }
+   ostringstream &operator() (ostringstream &os, T bi, T ei)const
+   {
+      T itr=bi;
 
-        return os;
-    }
+      while(itr!=ei)
+      {
+         os << *itr;
+      }
+
+      return os;
+   }
 };
 
-//2:
-template<typename Itr>
-ostream &print(const Itr &bi, const Itr &ei, ostream &os)
+Printer<string::iterator> the_printer;
+
+int main(int argc, char** argv)
 {
-    auto itr=bi;
+   ostringstream output;
 
-    while(itr!=ei)
-    {
-        os<< *itr << " ";
-        itr++;
-    }
+   string str1="Hello";
 
-    return os;
+   the_printer(output, str1.begin(), str1.end());
+
+   output << ",World";
+
+   cout << output.str() <<endl;
+
+   return 0;
 }
-
-int main()
-{
-    vector<int> vec(12,12);
-
-    Printer<vector<int>::iterator> the_printer;
-
-    the_printer(vec.begin(), vec.end(), cout)<<endl;
-    cout << sizeof(Printer<int>) << endl;//<<" " << sizeof(print)<< endl;
-
-    return 0;
-}
-
