@@ -1,0 +1,10 @@
+public class helloworld
+{
+	public static main(String args[])
+	{
+		boolean p=true, q=false;
+		
+		System.out.println("Hello World");
+		System.out.println(p&&q, p||q);
+	}
+}
