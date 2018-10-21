@@ -8,7 +8,7 @@ using namespace std;
 
 int main()
 {
-    ADT_RB_tree<int> the_tree;
+    ADT_RB_tree<int> the_tree; ADT
 
     auto func=[](ADT_RBtree_node<int> *ptr)->void
     {
