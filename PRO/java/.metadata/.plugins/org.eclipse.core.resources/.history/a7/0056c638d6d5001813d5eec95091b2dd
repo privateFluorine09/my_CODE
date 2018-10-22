@@ -1,0 +1,16 @@
+public class newrun1
+{
+	public static void main(String args[])
+	{
+		int b=1;
+		int a=b<<1;
+		int c=a|b;
+		c~=c;
+		System.out.print(Binary(c));
+	}
+	
+	public static String Binary(int b)
+	{
+		return Integer.toBinaryString(b);
+	}
+}

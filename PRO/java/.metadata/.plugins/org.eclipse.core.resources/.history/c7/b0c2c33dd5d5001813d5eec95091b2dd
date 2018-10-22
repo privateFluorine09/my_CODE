@@ -1,0 +1,14 @@
+public class newrun1
+{
+	public static void main(String args[])
+	{
+		byte b=1;
+		b=b<<1;
+		System.out.print(Binary(b));
+	}
+	
+	public static String Binary(byte b)
+	{
+		return Integer.toBinaryString(b);
+	}
+}

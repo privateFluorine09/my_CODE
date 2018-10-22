@@ -40,7 +40,7 @@ public:
 
     inline const T &back()const
     {
-        return que_ptr[theRear];
+        return que_ptr[step_back(theRear)];
     }
 
     inline bool empty()const
@@ -65,6 +65,16 @@ private:
         return (location+steps)%queueSize;
     }
 
+    inline size_t step_back(const size_t &location)const
+    {
+        return (location-1+queueSize)%queueSize;
+    }
+
+    inline size_t step_back(const size_t &location, const size_t &steps)const
+    {
+        return (location-steps+queueSize)%queueSize;
+    }
+
     inline size_t difference(const size_t &location1, const size_t &location2)const
     {
         return (location1+queueSize-location2)%queueSize;
@@ -74,14 +84,19 @@ private:
 template<typename T>
 std::ostream &operator << (std::ostream &os, const UpQueue<T> &que)
 {
+    if(que.empty())
+        return os;
+
     size_t cur=que.theFront;
-    while(cur!=que.theRear)
+
+    do
     {
         os << que.que_ptr[cur] << " ";
         cur=que.step_forward(cur);
     }
+    while(cur!=que.theRear);
 
-    return os;
+        return os;
 }
 
 
@@ -111,19 +126,19 @@ UpQueue<T>::UpQueue(const UpQueue<T> &que):
 template<typename T>
 void UpQueue<T>::push(const T &theNew)
 {
-    if(theRear==theFront)
+    if(step_forward(theRear)==theFront)
     {
         size_t current1, current2;
 
         std::unique_ptr<T[]> new_ptr(new T[2*queueSize]);
 
         for(current1=0, current2=theFront; current2!=theRear;
-        current1++, current2=step_forward(current2))
+                current1++, current2=step_forward(current2))
         {
             new_ptr[current1]=que_ptr[current2];
         }
 
-        que_ptr.reset(new_ptr.release());
+        (this->que_ptr).reset(new_ptr.release());
 
         theFront=0;
         theRear=current1;
@@ -137,18 +152,19 @@ void UpQueue<T>::push(const T &theNew)
 int main()
 {
 
-    UpQueue<int> que= {2,3,3,4,3};
+    UpQueue<int> que({0,1});
+
+    std::cout << que << std::endl;
+    std::cout << que.front() <<" " <<que.back() <<std::endl;
 
     int input;
 
     while(std::cin>>input)
     {
         que.push(input);
-        std::cout << que << std::endl
-        ;
+        std::cout << que << std::endl;
+        std::cout << que.front() <<" " <<que.back() <<std::endl;
 
     }
-
-
     return 0;
 }

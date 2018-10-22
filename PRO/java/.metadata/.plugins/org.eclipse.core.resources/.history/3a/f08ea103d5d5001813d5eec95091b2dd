@@ -1,0 +1,9 @@
+public class newrun1
+{
+	public static void main(String args[])
+	{
+		byte b=101;
+		String output=Integer.toBinaryString(b);
+		System.out.print(output);
+	}
+}
