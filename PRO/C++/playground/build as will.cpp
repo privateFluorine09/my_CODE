@@ -40,7 +40,7 @@ public:
 
     inline const T &back()const
     {
-        return que_ptr[step_back(theRear)];
+        return que_ptr[theRear];
     }
 
     inline bool empty()const
@@ -81,28 +81,25 @@ private:
     }
 };
 
+//operator:
 template<typename T>
 std::ostream &operator << (std::ostream &os, const UpQueue<T> &que)
 {
     if(que.empty())
-        return os;
+      return os;
 
-    size_t cur=que.theFront;
-
-    do
+    for(size_t cur=que.theFront; cur!=que.theRear; cur=que.step_forward(cur))
     {
-        os << que.que_ptr[cur] << " ";
-        cur=que.step_forward(cur);
+       os << que.que_ptr[cur] << " ";
     }
-    while(cur!=que.theRear);
-
-        return os;
+    os << que.que_ptr[que.theRear];
+    return os;
 }
 
-
+//constructor:
 template<typename T>
 UpQueue<T>::UpQueue(const std::initializer_list<T> &the_list):
-    queueSize(2*the_list.size()), theRear(the_list.size()), que_ptr(new T[2*the_list.size()])
+    queueSize(2*the_list.size()), theRear(the_list.size()-1), que_ptr(new T[2*the_list.size()])
 {
     size_t i=0;
     auto itr=the_list.begin();
@@ -121,8 +118,9 @@ UpQueue<T>::UpQueue(const UpQueue<T> &que):
     {
         que_ptr[i]=que.que_ptr[i];
     }
+    que_ptr[i]=que.que_ptr[i];
 }
-
+//method:
 template<typename T>
 void UpQueue<T>::push(const T &theNew)
 {
@@ -138,6 +136,8 @@ void UpQueue<T>::push(const T &theNew)
             new_ptr[current1]=que_ptr[current2];
         }
 
+        new_ptr[current1]=que_ptr[current2];
+
         (this->que_ptr).reset(new_ptr.release());
 
         theFront=0;
@@ -145,7 +145,7 @@ void UpQueue<T>::push(const T &theNew)
         queueSize*=2;
     }
 
-    que_ptr[theRear]=theNew;
+    que_ptr[step_forward(theRear)]=theNew;
     theRear=step_forward(theRear);
 }
 
