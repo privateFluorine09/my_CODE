@@ -1,0 +1,26 @@
+public class newrun2
+{
+	public static void main(String args[])
+	{
+		int a[]= {3,4,5,63,3,345,13,3,4,};
+		int another[]=new int[5];
+		another[0]=9;
+		another[1]=3;
+		another[2]=45;
+		another[3]=42;
+		another[4]=3;
+		
+		printer(another);
+		System.out.print("\n");
+		printer(a);
+	}
+	
+	public static void printer(int arr[])
+	{
+		for(int i=0; i!=arr.length; i++)
+		{
+			System.out.print(arr[i]);
+			System.out.print(" ");
+		}
+	}
+}
