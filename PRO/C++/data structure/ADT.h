@@ -1793,7 +1793,7 @@ public:
     {
         return heap_ptr[0];
     }
-    void pop();
+    T pop();
     void push(const T &elm);
 
 private:
