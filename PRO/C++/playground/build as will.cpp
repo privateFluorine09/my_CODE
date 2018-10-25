@@ -8,65 +8,55 @@
 #include<memory>
 
 //preparation:
-
-class Heap_sort_pack
+static inline size_t parent(const size_t &index)
 {
-    ~Heap_sort_pack()=delete;
+    return (index-1)/2;
+}
 
-    template<typename Itr, typename F>
-    friend void heap_sort(const Itr&, const Itr&, const F&);
+static inline size_t left(const size_t &index)
+{
+    return 2*index+1;
+}
 
-    static inline size_t parent(const size_t &index)
+static inline size_t right(const size_t &index)
+{
+    return 2*index+2;
+}
+
+template<typename T>
+static inline void swap(T &a, T &b)
+{
+    T store=a;
+    a=b;
+    b=store;
+}
+
+template<typename Itr, typename F>
+static void max_heapify(const Itr &_begin, const Itr &_end, const size_t &index, const F &cmp)
+{
+    size_t the_size=_end-_begin;
+
+    if(index>=the_size)
     {
-        return (index-1)/2;
+        return;
     }
 
-    static inline size_t left(const size_t &index)
+    size_t largest=index;
+
+    if(left(index)<the_size && cmp(*(_begin+left(index)),*(_begin+index)) )
+        largest=left(index);
+
+    if(right(index)<the_size && cmp(*(_begin+right(index)),*(_begin+largest)) )
+        largest=right(index);
+
+    if(largest!=index)
     {
-        return 2*index+1;
+        swap(*(_begin+largest), *(_begin+index));
+        max_heapify(_begin, _end, largest, cmp);
     }
-
-    static inline size_t right(const size_t &index)
-    {
-        return 2*index+2;
-    }
-
-    template<typename T>
-    static inline void swap(T &a, T &b)
-    {
-        T store=a;
-        a=b;
-        b=store;
-    }
-
-    template<typename Itr, typename F>
-    static void max_heapify(const Itr &_begin, const Itr &_end, const size_t &index, const F &cmp)
-    {
-        size_t the_size=_end-_begin;
-
-        if(index>=the_size)
-        {
-            return;
-        }
-
-        size_t largest=index;
-
-        if(left(index)<the_size && cmp(*(_begin+left(index)),*(_begin+index)) )
-            largest=left(index);
-
-        if(right(index)<the_size && cmp(*(_begin+right(index)),*(_begin+largest)) )
-            largest=right(index);
-
-        if(largest!=index)
-        {
-            swap(*(_begin+largest), *(_begin+index));
-            max_heapify(_begin, _end, largest, cmp);
-        }
-    }
-};
+}
 
 //defination:
-using pack=Heap_sort_pack;
 
 template<typename Itr, typename F>
 void heap_sort(const Itr &_begin, const Itr &_end, const F &cmp)
@@ -75,18 +65,18 @@ void heap_sort(const Itr &_begin, const Itr &_end, const F &cmp)
 
     for(size_t i=the_size/2-1; i!=0; i--)
     {
-        pack::max_heapify(_begin, _end, i, cmp);
+        max_heapify(_begin, _end, i, cmp);
     }
 
-    pack::max_heapify(_begin, _end, 0, cmp);
+    max_heapify(_begin, _end, 0, cmp);
 
     auto itr=_end;
     --itr;
 
     while(itr!=_begin)
     {
-        pack::swap(*(_begin), *itr);
-        pack::max_heapify(_begin, itr, 0, cmp);
+        swap(*(_begin), *itr);
+        max_heapify(_begin, itr, 0, cmp);
         itr--;
     }
 }
