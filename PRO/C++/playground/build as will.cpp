@@ -7,94 +7,46 @@
 #include<utility>
 #include<memory>
 
-//preparation:
-static inline size_t parent(const size_t &index)
+template<typename T>
+struct Node
 {
-    return (index-1)/2;
-}
+   Node()=default;
+   Node(const T &new_elm): elm(new_elm) {};
 
-static inline size_t left(const size_t &index)
-{
-    return 2*index+1;
-}
 
-static inline size_t right(const size_t &index)
-{
-    return 2*index+2;
-}
+   T elm;
+   std::shared_ptr<Node> left;
+   std::shared_ptr<Node> right;
+   std::shared_ptr<Node> parent;
+
+   static std::shared_ptr<Node> nil;
+};
 
 template<typename T>
-static inline void swap(T &a, T &b)
+std::shared_ptr<Node<T>> Node<T>::nil(nullptr);
+
+template<typename T>
+class BinaryTree
 {
-    T store=a;
-    a=b;
-    b=store;
-}
+   template<typename ElmType>
+   using ptr_type=std::shared_ptr<Node<ElmType>>;
 
-template<typename Itr, typename F>
-static void max_heapify(const Itr &_begin, const Itr &_end, const size_t &index, const F &cmp)
-{
-    size_t the_size=_end-_begin;
+   const ptr_type<T> &nullptr_t=Node<T>::nil;
 
-    if(index>=the_size)
-    {
-        return;
-    }
+public:
 
-    size_t largest=index;
-
-    if(left(index)<the_size && cmp(*(_begin+left(index)),*(_begin+index)) )
-        largest=left(index);
-
-    if(right(index)<the_size && cmp(*(_begin+right(index)),*(_begin+largest)) )
-        largest=right(index);
-
-    if(largest!=index)
-    {
-        swap(*(_begin+largest), *(_begin+index));
-        max_heapify(_begin, _end, largest, cmp);
-    }
-}
-
-//defination:
-
-template<typename Itr, typename F>
-void heap_sort(const Itr &_begin, const Itr &_end, const F &cmp)
-{
-    size_t the_size=_end-_begin;
-
-    for(size_t i=the_size/2-1; i!=0; i--)
-    {
-        max_heapify(_begin, _end, i, cmp);
-    }
-
-    max_heapify(_begin, _end, 0, cmp);
-
-    auto itr=_end;
-    --itr;
-
-    while(itr!=_begin)
-    {
-        swap(*(_begin), *itr);
-        max_heapify(_begin, itr, 0, cmp);
-        itr--;
-    }
-}
-
+private:
+};
 
 int main()
 {
-    std::vector<int> vec= {7,4,2,2,3,5,6,24,4,3,3,2};
+   std::shared_ptr<int> p(nullptr);
 
-    auto fun=[](const int &a, const int &b)->bool
-    {
-        return a>b;
-    };
+   auto q=p;
 
-    heap_sort(vec.begin(), vec.end(), fun);
+   auto q1=p;
 
-    for(const auto &a: vec)
-        std::cout << a << " ";
+   std::cout << q1.use_count() << " " << p.use_count();
 
-    return 0;
+   return 0;
 }
