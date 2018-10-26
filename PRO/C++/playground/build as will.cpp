@@ -10,14 +10,20 @@
 template<typename T>
 struct Node
 {
+
+   template<typename NodeType>
+   using ptr=std::shared_ptr<NodeType>;
+
    Node()=default;
    Node(const T &new_elm): elm(new_elm) {};
-
+   Node(const T &new_elm, ptr<Node> the_l, ptr<Node> the_r, ptr<Node> the_p):
+      elm(new_elm), left(the_l), right(the_r), parent(the_p) {};
+   ~Node()=default;
 
    T elm;
-   std::shared_ptr<Node> left;
-   std::shared_ptr<Node> right;
-   std::shared_ptr<Node> parent;
+   ptr<Node> left;
+   ptr<Node> right;
+   ptr<Node> parent;
 
    static std::shared_ptr<Node> nil;
 };
@@ -36,17 +42,38 @@ class BinaryTree
 public:
 
 private:
+   ptr_type<T> head=nullptr_t;
+   size_t tree_size=0;
+
+   template<typename F>
+   static void preOrder(const F &);
+
+   template<typename F>
+   static void inOrder(const F &);
+
+   template<typename F>
+   static void postOrder(const F &);
+
+   template<typename F>
+   static void levelOrder(const F &);
+
 };
+
+template<typename F, typename Value_T>
+static inline bool isTrue(const Value_T &lhs, const Value_T &rhs, const F &callable)
+{
+   return callable(lhs, rhs);
+}
 
 int main()
 {
-   std::shared_ptr<int> p(nullptr);
+//int a=43, b=32;
+   auto fun=[](const int &a, const int &b)->bool
+   {
+      return a==b;
+   };
 
-   auto q=p;
-
-   auto q1=p;
-
-   std::cout << q1.use_count() << " " << p.use_count();
+   std::cout << isTrue(1,2,fun);
 
    return 0;
 }
