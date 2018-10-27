@@ -25,11 +25,7 @@ struct Node
    ptr<Node> right;
    ptr<Node> parent;
 
-   static std::shared_ptr<Node> nil;
 };
-
-template<typename T>
-std::shared_ptr<Node<T>> Node<T>::nil(nullptr);
 
 template<typename T>
 class BinaryTree
@@ -37,27 +33,44 @@ class BinaryTree
    template<typename ElmType>
    using ptr_type=std::shared_ptr<Node<ElmType>>;
 
-   const ptr_type<T> &nullptr_t=Node<T>::nil;
+   static inline bool isNull()
+   {
+      return;
+   }
 
 public:
 
 private:
-   ptr_type<T> head=nullptr_t;
+   ptr_type<T> head;
    size_t tree_size=0;
 
    template<typename F>
-   static void preOrder(const F &);
+   static void preOrder(const F &, ptr_type<T>&);
 
    template<typename F>
-   static void inOrder(const F &);
+   static void inOrder(const F &, ptr_type<T>&);
 
    template<typename F>
-   static void postOrder(const F &);
+   static void postOrder(const F &, ptr_type<T>&);
 
    template<typename F>
-   static void levelOrder(const F &);
+   static void levelOrder(const F &, ptr_type<T>&);
 
 };
+
+
+
+//operator:
+
+//constructor:
+
+//method:
+template<typename T>
+template<typename F>
+void BinaryTree<T>::preOrder(const F &visiter, ptr_type<T> &ptr)
+{
+
+}
 
 template<typename F, typename Value_T>
 static inline bool isTrue(const Value_T &lhs, const Value_T &rhs, const F &callable)
@@ -65,15 +78,14 @@ static inline bool isTrue(const Value_T &lhs, const Value_T &rhs, const F &calla
    return callable(lhs, rhs);
 }
 
+using std::cout;
+
 int main()
 {
-//int a=43, b=32;
-   auto fun=[](const int &a, const int &b)->bool
-   {
-      return a==b;
-   };
+   std::shared_ptr<int> p1, p2;
+   p2.reset(new int(31));
 
-   std::cout << isTrue(1,2,fun);
+   cout << sizeof(std::weak_ptr<int>) <<std::endl;
 
    return 0;
 }
