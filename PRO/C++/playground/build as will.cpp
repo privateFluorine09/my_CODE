@@ -12,7 +12,7 @@ struct Node
 {
 
    template<typename NodeType>
-   using ptr=std::shared_ptr<NodeType>;
+   using ptr=std::unique_ptr<NodeType>;
 
    Node()=default;
    Node(const T &new_elm): elm(new_elm) {};
@@ -82,10 +82,13 @@ using std::cout;
 
 int main()
 {
-   std::shared_ptr<int> p1, p2;
-   p2.reset(new int(31));
+   std::unique_ptr<Node<int>> n1(new Node<int>(3));
 
-   cout << sizeof(std::weak_ptr<int>) <<std::endl;
+   std::unique_ptr<Node<int>> n2(new Node<int>(3));
+
+   (n1->left).reset(n2.release());
+
+   (n2->parent).reset(n1.release());
 
    return 0;
 }
