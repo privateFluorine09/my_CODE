@@ -5,90 +5,159 @@
 #include<string>
 #include<vector>
 #include<utility>
+#include<queue>
 #include<memory>
 
 template<typename T>
 struct Node
 {
+    Node()=default;
+    Node(const T &elm): element(elm) {}
+    Node(const T &elm, const Node *&lp, const Node *&rp, const Node *&pp):
+        element(elm), left(lp), right(rp), parent(pp) {}
+    ~Node()=default;
 
-   template<typename NodeType>
-   using ptr=std::unique_ptr<NodeType>;
+    T element;
+    Node* left=nullptr;
+    Node* right=nullptr;
+    Node* parent=nullptr;
 
-   Node()=default;
-   Node(const T &new_elm): elm(new_elm) {};
-   Node(const T &new_elm, ptr<Node> the_l, ptr<Node> the_r, ptr<Node> the_p):
-      elm(new_elm), left(the_l), right(the_r), parent(the_p) {};
-   ~Node()=default;
+    inline bool is_root()const
+    {
+        return parent==nullptr;
+    }
 
-   T elm;
-   ptr<Node> left;
-   ptr<Node> right;
-   ptr<Node> parent;
-
+    inline bool is_leaf()const
+    {
+        return (left==nullptr)&&(right==nullptr);
+    }
 };
 
 template<typename T>
 class BinaryTree
 {
-   template<typename ElmType>
-   using ptr_type=std::shared_ptr<Node<ElmType>>;
+    //Alias and static methods:
+    template<typename ElmType>
+    using tree=BinaryTree<ElmType>;
 
-   static inline bool isNull()
-   {
-      return;
-   }
+    template<typename ElmType>
+    using node=Node<ElmType>;
+
+    template<typename F>
+    static void pre_order(const node<T> *&ptr, const F &visiter)
+    {
+        if(ptr!=nullptr)
+        {
+            visiter(ptr);
+
+            pre_order(ptr->left, visiter);
+            pre_order(ptr->right, visiter);
+        }
+    }
+
+    template<typename F>
+    static void in_order(const node<T> *&ptr, const F &visiter)
+    {
+        if(ptr!=nullptr)
+        {
+            pre_order(ptr->left, visiter);
+
+            visiter(ptr);
+
+            pre_order(ptr->right, visiter);
+        }
+    }
+
+    template<typename F>
+    static void post_order(const node<T> *&ptr, const F &visiter)
+    {
+        if(ptr!=nullptr)
+        {
+            pre_order(ptr->left, visiter);
+            pre_order(ptr->right, visiter);
+
+            visiter(ptr);
+        }
+    }
+
+    template<typename F>
+    static void level_order(const node<T> *&ptr, const F &visiter)
+    {
+        std::queue<node<T>*> que;
+
+        if(ptr!=nullptr)
+            que.push(ptr);
+
+        node<T> *current;
+
+        while(!que.empty())
+        {
+            current=que.front();
+
+            if(current->left!=nullptr)
+                que.push(current->left);
+
+            if(current->right!=nullptr)
+                que.push(current->rihgt);
+
+            visiter(current);
+            que.pop();
+        }
+    }
 
 public:
 
+    BinaryTree()=default;
+    BinaryTree(const BinaryTree&);
+    BinaryTree(const std::initializer_list<T>&);
+    ~BinaryTree();
+
+    inline bool empty()const
+    {
+        return root==nullptr;
+    }
+
+    inline bool size()const
+    {
+        return tree_size==0;
+    }
+
+    template<typename F>
+    void pre_order(const F &visiter)
+    {
+        pre_order(this->root, visiter);
+    }
+
+    template<typename F>
+    void in_order(const F &visiter)
+    {
+        in_order(this->root, visiter);
+    }
+
+    template<typename F>
+    void post_order(const F &visiter)
+    {
+        post_order(this->root, visiter);
+    }
+
+    template<typename F>
+    void level_order(const F &visiter)
+    {
+        level_order(this->root, visiter);
+    }
+
 private:
-   ptr_type<T> head;
-   size_t tree_size=0;
+    node<T> *root=nullptr;
+    size_t tree_size=0;
 
-   template<typename F>
-   static void preOrder(const F &, ptr_type<T>&);
-
-   template<typename F>
-   static void inOrder(const F &, ptr_type<T>&);
-
-   template<typename F>
-   static void postOrder(const F &, ptr_type<T>&);
-
-   template<typename F>
-   static void levelOrder(const F &, ptr_type<T>&);
+    static void unroot()
+    {
+        post_order([](node<T> *ptr)->void{ delete ptr; });
+    }
 
 };
 
-
-
-//operator:
-
-//constructor:
-
-//method:
-template<typename T>
-template<typename F>
-void BinaryTree<T>::preOrder(const F &visiter, ptr_type<T> &ptr)
-{
-
-}
-
-template<typename F, typename Value_T>
-static inline bool isTrue(const Value_T &lhs, const Value_T &rhs, const F &callable)
-{
-   return callable(lhs, rhs);
-}
-
-using std::cout;
-
 int main()
 {
-   std::unique_ptr<Node<int>> n1(new Node<int>(3));
-
-   std::unique_ptr<Node<int>> n2(new Node<int>(3));
-
-   (n1->left).reset(n2.release());
-
-   (n2->parent).reset(n1.release());
-
-   return 0;
+    return 0;
 }
