@@ -1,14 +1,8 @@
 # depslib dependency file v1.0
-1540897081 source:c:\users\wzm07\pro\c++\playground\build as will.cpp
+1544090154 source:c:\users\wzm07\pro\c++\playground\build as will.cpp
 	<iostream>
-	<fstream>
-	<cstdlib>
-	<initializer_list>
 	<string>
 	<vector>
-	<utility>
-	<queue>
-	<memory>
 
 1539688410 source:c:\users\wzm07\pro\c++\playground\arraylist_with_uptr.cpp
 	<iostream>
